@@ -1,13 +1,13 @@
 import java.util.Scanner;
 
-public class task {
+public class Task {
     private String id;
     private String name;
     private User user;
     private String deadline;
 
 
-    public task() {
+    public Task() {
         Scanner scaner = new Scanner(System.in);
 
         System.out.println("Enter task id: ");

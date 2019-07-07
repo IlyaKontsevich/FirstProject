@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class ConsoleApp {
-    private List<task> tasks = new ArrayList();
+    private List<Task> tasks = new ArrayList();
     private List<User> users = new ArrayList();
 
     public static void main(String[] Args){
@@ -12,7 +12,7 @@ public class ConsoleApp {
     }
 
 
-     public void image() {
+     public void output() {
         System.out.println();
         System.out.println("            Console application");
         System.out.println("1.Add task");
@@ -27,24 +27,24 @@ public class ConsoleApp {
         Scanner scaner = new Scanner(System.in);
 
         while (symbol != 5) {
-            image();
+            output();
             symbol = scaner.nextInt();
             switch(symbol)
             {
                 case 1:
-                    AddTask();
+                    addTask();
                     break;
 
                 case 2:
-                    AddUser();
+                    addUser();
                     break;
 
                 case 3:
-                    ShowTask();
+                    showTask();
                     break;
 
                 case 4:
-                    ShowUser();
+                    showUser();
                     break;
 
                 case 5:
@@ -52,35 +52,35 @@ public class ConsoleApp {
 
 
                 default:
-                Error();
+                error();
             }
         }
     }
 
-    public void AddTask(){
-        tasks.add(new task());
+    public void addTask(){
+        tasks.add(new Task());
         users.add(tasks.get(tasks.size() - 1).GetUser());
     }
 
 
-    public void AddUser(){
+    public void addUser(){
         users.add(new User());
     }
 
-    public void ShowUser(){
+    public void showUser(){
         for (User user : users){
             System.out.println(user.GetName());
         }
     }
 
-    public void ShowTask(){
-        for (task Task : tasks){
+    public void showTask(){
+        for (Task Task : tasks){
             Task.GetInfo();
             System.out.println();
         }
     }
 
-    public void Error(){
+    public void error(){
         System.out.println("Error.");
     }
 }

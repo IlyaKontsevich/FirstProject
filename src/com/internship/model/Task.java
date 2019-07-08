@@ -1,6 +1,5 @@
 package com.internship.model;
 
-import javax.xml.crypto.Data;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,12 +15,10 @@ public class Task {
 
     public Task() {
         Scanner scaner = new Scanner(System.in);
-
-        id = hashCode();
         System.out.println("Enter task name: ");
         name = scaner.nextLine();
         inputData();
-        addUser();
+        id = hashCode();
     }
 
     public void inputData(){
@@ -47,8 +44,8 @@ public class Task {
         return name;
     }
 
-    public void addUser(){
-        this.user = new User();
+    public void addUser(User user){
+        this.user = user;
     }
     public void GetInfo(){
         System.out.println("Task id: " + id);
@@ -57,13 +54,12 @@ public class Task {
         System.out.println("User name: " + user.GetName());
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(id, task.id) &&
+        return id == task.id &&
                 Objects.equals(name, task.name) &&
                 Objects.equals(user, task.user) &&
                 Objects.equals(deadline, task.deadline);

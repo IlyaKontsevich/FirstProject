@@ -30,10 +30,13 @@ public class ConsoleApp {
 
     public void scan(){
         int symbol = 0;
+        Scanner scaner2 = new Scanner(System.in);
         Scanner scaner = new Scanner(System.in);
         Service service = new Service();
 
+
         while (symbol != 9) {
+            String name;
             output();
             symbol = scaner.nextInt();
             switch(symbol)
@@ -43,7 +46,9 @@ public class ConsoleApp {
                     break;
 
                 case 2:
-                    service.addUser(new User());
+                    System.out.println("Enter name of user: ");
+                    name = scaner2.nextLine();
+                    service.addUser(new User(name));
                     break;
 
                 case 3:
@@ -57,22 +62,26 @@ public class ConsoleApp {
 
                 case 5:
                     System.out.println("Enter name of task: ");
-                    service.getTask(scaner.nextLine());
+                    name = scaner2.nextLine();
+                    service.getTask(name);
                     break;
 
                 case 6:
                     System.out.println("Enter name of user: ");
-                    service.getUser(scaner.nextLine());
+                    name = scaner2.nextLine();
+                    service.getUser(name);
                     break;
 
                 case 7:
                     System.out.println("Enter taskname to delete: ");
-                    service.deleteTask(scaner.nextLine());
+                    name = scaner2.nextLine();
+                    service.deleteTask(name);
                     break;
 
                 case 8:
                     System.out.println("Enter username to delete: ");
-                    service.deleteUser(scaner.nextLine());
+                    name = scaner2.nextLine();
+                    service.deleteUser(name);
                     break;
 
                 case 9:

@@ -5,7 +5,7 @@ import java.util.*;
 
 public class User {
     private String name;
-    private List<Task> tasks = new ArrayList();
+    private Map<String,Task> tasks = new HashMap();
 
 
 
@@ -13,33 +13,30 @@ public class User {
         return name;
     }
 
-    public List<Task> getTasks(){
-        return tasks;
+    public Collection<Task> getTasks(){
+        return tasks.values();
     }
 
-    public void deleteTask(Task task){
-        tasks.remove(task);
+    public void deleteUserTask(String name){
+        tasks.remove(name);
     }
 
     public void getInfo(){
         System.out.println("Name of user: " + name);
 
-        System.out.println("User tasks: ");
-        for (Task task : tasks){
-            System.out.println(task.getName());
-            System.out.println();
+        System.out.print("User tasks: ");
+        for (Task task : tasks.values()){
+            System.out.print(task.getName() + "   ");
         }
+        System.out.println(" ");
     }
 
-    public User(){
-        Scanner scaner = new Scanner(System.in);
-
-        System.out.println("Enter user name: ");
-        name = scaner.nextLine();
+    public User(String name){
+        this.name = name;
     }
 
     public void addTask(Task task){
-        tasks.add(task);
+        tasks.put(task.getName(), task);
     }
 
     @Override

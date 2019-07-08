@@ -9,23 +9,22 @@ public class DAO {
     Store store = new Store();
     public void addTask(Task task){
         store.tasks.put(task.getName(), task);
-        System.out.println("Task successfully added");
-        //users.add(tasks.get(tasks.size() - 1).GetUser());
+        System.out.println("Task: " + task.getName() + " successfully added");
     }
 
     public void addUser(User user){
         store.users.put(user.GetName() ,user);
-        System.out.println("User successfully added");
+        System.out.println("User: " + user.GetName() + " successfully added");
     }
 
     public void deleteUser(String name){
         store.users.remove(name);
-        System.out.println("User" + name + "successfully deleted");
+        System.out.println("User: " + name + " successfully deleted");
     }
 
     public void deleteTask(String name){
         store.tasks.remove(name);
-        System.out.println("Task" + name + "successfully deleted");
+        System.out.println("Task: " + name + " successfully deleted");
     }
 
     public Task getTask(String name){ return store.tasks.get(name);    }

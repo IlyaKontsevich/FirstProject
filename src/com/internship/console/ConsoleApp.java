@@ -1,4 +1,7 @@
+package com.internship.console;
+
 import java.util.*;
+import  com.internship.model.*;
 
 public class ConsoleApp {
     private List<Task> tasks = new ArrayList();

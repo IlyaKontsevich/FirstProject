@@ -1,3 +1,5 @@
+package com.internship.model;
+
 import java.util.Scanner;
 
 public class User {
@@ -17,3 +19,22 @@ public class User {
     }
 
 }
+//1.Naming convention
+//2.Pakets
+//3.github .idea .out *.iml + ignore: campiled; IDE; build
+//4.RAEDME.md
+//store
+//!
+//Dao  CRUD user or task
+//!
+//Service
+//!
+//console controller + validation
+//by.exapel.model.User
+//          .console.M
+//          .service.
+//          .dao
+
+
+
+//Task: user.id

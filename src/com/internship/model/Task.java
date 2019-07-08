@@ -1,3 +1,5 @@
+package com.internship.model;
+
 import java.util.Scanner;
 
 public class Task {

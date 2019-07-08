@@ -19,6 +19,7 @@ public class User {
     }
 
 }
+//fdgdfg
 //1.Naming convention
 //2.Pakets
 //3.github .idea .out *.iml + ignore: campiled; IDE; build

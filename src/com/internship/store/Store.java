@@ -4,6 +4,6 @@ import com.internship.model.*;
 import java.util.*;
 
 public class Store {
-    private List<Task> tasks = new ArrayList();
-    private List<User> users = new ArrayList();
+    public Map<String, Task> tasks = new HashMap();
+    public Map<String, User> users = new HashMap();
 }

@@ -1,14 +1,34 @@
 package com.internship.model;
 
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
+
 
 public class User {
     private String name;
+    private List<Task> tasks = new ArrayList();
+
 
 
     public String GetName(){
         return name;
+    }
+
+    public List<Task> getTasks(){
+        return tasks;
+    }
+
+    public void deleteTask(Task task){
+        tasks.remove(task);
+    }
+
+    public void getInfo(){
+        System.out.println("Name of user: " + name);
+
+        System.out.println("User tasks: ");
+        for (Task task : tasks){
+            System.out.println(task.getName());
+            System.out.println();
+        }
     }
 
     public User(){
@@ -16,7 +36,10 @@ public class User {
 
         System.out.println("Enter user name: ");
         name = scaner.nextLine();
-        System.out.println("User successfully add");
+    }
+
+    public void addTask(Task task){
+        tasks.add(task);
     }
 
     @Override

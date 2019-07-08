@@ -1,31 +1,55 @@
 package com.internship.model;
 
+import javax.xml.crypto.Data;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class Task {
-    private String id;
+    private int id;
     private String name;
     private User user;
-    private String deadline;
+    private Date deadline;
 
 
     public Task() {
         Scanner scaner = new Scanner(System.in);
 
-        System.out.println("Enter task id: ");
-        id = scaner.nextLine();
+        id = hashCode();
         System.out.println("Enter task name: ");
         name = scaner.nextLine();
-        System.out.println("Enter task deadline: ");
-        deadline = scaner.nextLine();
-        this.user = new User();
-        System.out.println("Task successfully add");
+        inputData();
+        addUser();
     }
+
+    public void inputData(){
+        Scanner scaner = new Scanner(System.in);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        while(true) {
+            try {
+                System.out.println("Enter task deadline in format: dd-MM-yyyy ");
+                deadline = dateFormat.parse(scaner.next());
+                break;
+            } catch (ParseException e) {
+                System.out.println("Date error. Please try again: ");
+            }
+        }
+    }
+
     public User GetUser(){
         return user;
     }
 
+    public String getName(){
+        return name;
+    }
+
+    public void addUser(){
+        this.user = new User();
+    }
     public void GetInfo(){
         System.out.println("Task id: " + id);
         System.out.println("Task name: " + name);

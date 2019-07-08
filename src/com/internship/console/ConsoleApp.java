@@ -2,11 +2,9 @@ package com.internship.console;
 
 import java.util.*;
 import  com.internship.model.*;
+import com.internship.service.Service;
 
 public class ConsoleApp {
-    private List<Task> tasks = new ArrayList();
-    private List<User> users = new ArrayList();
-
     public static void main(String[] Args){
         ConsoleApp apllication = new ConsoleApp();
 
@@ -16,70 +14,74 @@ public class ConsoleApp {
 
 
      public void output() {
+
         System.out.println();
-        System.out.println("            Console application");
-        System.out.println("1.Add task");
-        System.out.println("2.Add user");
-        System.out.println("3.Output task");
-        System.out.println("4.Output User");
-        System.out.println("5.exit");
+        System.out.println("                Console application");
+        System.out.println("    1.Add task");
+        System.out.println("    2.Add user");
+        System.out.println("    3.Output tasks");
+        System.out.println("    4.Output Users");
+        System.out.println("    5.Find task");
+        System.out.println("    6.Find user");
+        System.out.println("    7.Delete task");
+        System.out.println("    8.Delete User");
+        System.out.println("    9.exit");
     }
 
     public void scan(){
         int symbol = 0;
         Scanner scaner = new Scanner(System.in);
+        Service service = new Service();
 
-        while (symbol != 5) {
+        while (symbol != 9) {
             output();
             symbol = scaner.nextInt();
             switch(symbol)
             {
                 case 1:
-                    addTask();
+                    service.addTask(new Task());
                     break;
 
                 case 2:
-                    addUser();
+                    service.addUser(new User());
                     break;
 
                 case 3:
-                    showTask();
+
+                    service.getAllTasks();
                     break;
 
                 case 4:
-                    showUser();
+                    service.getAllUsers();
                     break;
 
                 case 5:
+                    System.out.println("Enter name of task: ");
+                    service.getTask(scaner.nextLine());
+                    break;
+
+                case 6:
+                    System.out.println("Enter name of user: ");
+                    service.getUser(scaner.nextLine());
+                    break;
+
+                case 7:
+                    System.out.println("Enter taskname to delete: ");
+                    service.deleteTask(scaner.nextLine());
+                    break;
+
+                case 8:
+                    System.out.println("Enter username to delete: ");
+                    service.deleteUser(scaner.nextLine());
+                    break;
+
+                case 9:
                     break;
 
 
                 default:
                 error();
             }
-        }
-    }
-
-    public void addTask(){
-        tasks.add(new Task());
-        users.add(tasks.get(tasks.size() - 1).GetUser());
-    }
-
-
-    public void addUser(){
-        users.add(new User());
-    }
-
-    public void showUser(){
-        for (User user : users){
-            System.out.println(user.GetName());
-        }
-    }
-
-    public void showTask(){
-        for (Task Task : tasks){
-            Task.GetInfo();
-            System.out.println();
         }
     }
 

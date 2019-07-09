@@ -3,106 +3,57 @@ package com.internship.service;
 import com.internship.dao.*;
 import com.internship.model.*;
 
-import java.util.Scanner;
+import java.util.Collection;
 
 public class Service {
-    DAO dao = new DAO();
+    TaskDao taskDao = new TaskDao();
+    UserDao userDao = new UserDao();
 
-    public void addTask(Task task){
-        Scanner scaner = new Scanner(System.in);
-
-        while (dao.getTask(task.getName()) != null){
-            System.out.println("A task with the same name already exists. Pleas input new task");
-            task = new Task();
+    public boolean addTask(Task task,String name){
+        if (taskDao.get(task.getName()) != null){ // exist check
+            return false;
         }
-
-        System.out.println("Enter user name: ");
-        String name = scaner.nextLine();
-        if  (dao.getUser(name) == null) {
+        if  (userDao.get(name) == null) {
             task.addUser(new User(name));//add user for task
-            dao.addUser(task.GetUser()); // add user in list
-            dao.getUser(name).addTask(task); //add task in users list
+            userDao.add(task.getUser()); // add user in list
+            userDao.get(name).addTask(task); //add task in users list
         }else{
-            task.addUser(dao.getUser(name)); //add user for task
-            dao.getUser(name).addTask(task); //add task in user list
+            task.addUser(userDao.get(name)); //add user for task
+            userDao.get(name).addTask(task); //add task in user list
         }
-
-        dao.addTask(task);
+        taskDao.add(task);
+        return true;
     }
 
-    public void addUser(User user){
-        Scanner scaner = new Scanner(System.in);
-
-        while (dao.getUser(user.GetName()) != null){
-            System.out.println("A user with the same name already exists. Pleas input new user");
-            System.out.println("Enter user name: ");
-            String name = scaner.nextLine();
-            user = new User(name);
+    public boolean addUser(User user){
+        if (userDao.get(user.getName()) != null){ //exist check
+            return false;
         }
-        dao.addUser(user);
+        userDao.add(user);
+        return true;
     }
 
     public void deleteUser(String name){
-        if(dao.getUser(name) == null){
-            System.out.println("A user with the same name don't exists");
+        userDao.delete(name);
+    }
+
+    public boolean deleteTask(String name){
+        if(taskDao.get(name) == null){
+            return false;
         }
         else {
-            for (Task task : dao.getUser(name).getTasks()){
-                if (dao.getTask(task.getName()) != null) {
-                    System.out.print("Delete users task:  ");
-                    dao.deleteTask(task.getName());
-                }
-            }
-            dao.deleteUser(name);
-        }
-    }
-
-    public void deleteTask(String name){
-        if(dao.getTask(name) == null){
-            System.out.println("A task with the same name don't exists");
-        }
-        else {
-            dao.getTask(name).GetUser().deleteUserTask(name);//deleted task from users list
-            dao.deleteTask(name);
+            taskDao.get(name).getUser().deleteUserTask(taskDao.get(name));//deleted task from users list
+            taskDao.delete(name);
+            return true;
         }
     }
 
 
-    public void getTask(String name){
-        if(dao.getTask(name) == null){
-            System.out.println("A task with the same name don't exists");
-        }
-        else {
-            dao.getTask(name).GetInfo();
-        }
-    }
+    public Task getTask(String name){ return taskDao.get(name); }
 
-    public void getUser(String name){
-        if(dao.getUser(name) == null){
-            System.out.println("A user with the same name don't exists");
-        }
-        else {
-            dao.getUser(name).getInfo();
-        }
-    }
+    public User getUser(String name){ return userDao.get(name); }
 
-    public void getAllTasks(){
-        if (dao.getTaskSize() != 0 ){
-            for (Task task : dao.getTasks()){
-                task.GetInfo();
-            }
-        } else {
-            System.out.println("Empty list");
-        }
-    }
+    public Collection<Task> getAllTasks(){ return taskDao.getAll(); }
 
-    public void getAllUsers() {
-        if (dao.getUserSize() != 0) {
-            for (User user : dao.getUsers()) {
-                user.getInfo();
-            }
-        } else {
-            System.out.println("Empty list");
-        }
-    }
+    public Collection<User> getAllUsers() { return userDao.getAll(); }
 }

@@ -5,38 +5,29 @@ import java.util.*;
 
 public class User {
     private String name;
-    private Map<String,Task> tasks = new HashMap();
+    private List<Task> tasks = new ArrayList();
 
-
-
-    public String GetName(){
+    public String getName(){
         return name;
     }
 
-    public Collection<Task> getTasks(){
-        return tasks.values();
+    public List<Task> getTasks(){
+        return tasks;
+    }
+    public Task getTask(int i){
+        return tasks.get(i);
     }
 
-    public void deleteUserTask(String name){
-        tasks.remove(name);
-    }
-
-    public void getInfo(){
-        System.out.println("Name of user: " + name);
-
-        System.out.print("User tasks: ");
-        for (Task task : tasks.values()){
-            System.out.print(task.getName() + "   ");
-        }
-        System.out.println(" ");
+    public void deleteUserTask(Task task){
+        tasks.remove(task);
     }
 
     public User(String name){
         this.name = name;
     }
 
-    public void addTask(Task task){
-        tasks.put(task.getName(), task);
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 
     @Override
@@ -52,23 +43,3 @@ public class User {
         return Objects.hash(name);
     }
 }
-//fdgdfg
-//1.Naming convention
-//2.Pakets
-//3.github .idea .out *.iml + ignore: campiled; IDE; build
-//4.RAEDME.md
-//store
-//!
-//Dao  CRUD user or task
-//!
-//Service
-//!
-//console controller + validation
-//by.exapel.model.User
-//          .console.M
-//          .service.
-//          .dao
-
-
-
-//Task: user.id

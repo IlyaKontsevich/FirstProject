@@ -3,6 +3,7 @@ package com.internship.dao;
 import com.internship.model.User;
 import com.internship.store.UserStore;
 
+import java.io.IOException;
 import java.util.Collection;
 
 public class UserDao {
@@ -16,5 +17,8 @@ public class UserDao {
     public Collection<User> getAll(){ return store.users.values();}
 
     public User get(String name){ return store.users.get(name); }
+
+    public void addInfo() throws IOException { store.addInfo();}
+    public void getInfo() throws IOException { store.getInfo();}
 
 }

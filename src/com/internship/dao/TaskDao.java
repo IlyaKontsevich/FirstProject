@@ -3,6 +3,8 @@ package com.internship.dao;
 import com.internship.model.*;
 import com.internship.store.*;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.*;
 
 public class TaskDao {
@@ -15,6 +17,9 @@ public class TaskDao {
 
     public Collection<Task> getAll(){ return store.tasks.values(); }
 
+    public void addInfo() throws IOException { store.addInfo();}
+
+    public void getInfo() throws IOException, ParseException { store.getInfo();}
 }
 //doa do 2class
 //input uotput, only in console

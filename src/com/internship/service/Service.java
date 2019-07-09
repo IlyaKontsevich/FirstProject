@@ -3,6 +3,8 @@ package com.internship.service;
 import com.internship.dao.*;
 import com.internship.model.*;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Collection;
 
 public class Service {
@@ -56,4 +58,19 @@ public class Service {
     public Collection<Task> getAllTasks(){ return taskDao.getAll(); }
 
     public Collection<User> getAllUsers() { return userDao.getAll(); }
+
+    public void addTaskInfo() throws IOException { taskDao.addInfo();}
+
+    public void getTaskInfo() throws IOException, ParseException { taskDao.getInfo();}
+
+    public void addUserInfo() throws IOException { userDao.addInfo();}
+
+    public void getUserInfo() throws IOException { userDao.getInfo();}
+
+    public void addRelationship(){
+        for(Task task : taskDao.getAll()){
+            task.addUser(userDao.get(task.getUserName()));//add user for task
+            userDao.get(task.getUserName()).addTask(task);//add tasks for user
+        }
+    }
 }

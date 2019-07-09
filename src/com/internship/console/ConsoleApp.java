@@ -1,5 +1,6 @@
 package com.internship.console;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -7,7 +8,7 @@ import  com.internship.model.*;
 import com.internship.service.Service;
 
 public class ConsoleApp {
-    public static void main(String[] Args){
+    public static void main(String[] Args) throws IOException, ParseException {
         ConsoleApp apllication = new ConsoleApp();
 
         apllication.scan();
@@ -30,11 +31,13 @@ public class ConsoleApp {
         System.out.println("    9.exit");
     }
 
-    public void scan(){
+    public void scan() throws IOException, ParseException {
         int symbol = 0;
         Scanner symbolScanner = new Scanner(System.in);
         Service service = new Service();
-
+        service.getUserInfo();
+        service.getTaskInfo();
+        service.addRelationship();
 
         while (symbol != 9) {
             String userName;
@@ -133,6 +136,9 @@ public class ConsoleApp {
                 error();
             }
         }
+
+        service.addTaskInfo();
+        service.addUserInfo();
     }
 
     public void error(){

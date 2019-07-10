@@ -8,7 +8,6 @@ import java.util.*;
 public class Task {
     private int id;
     private String name;
-    private User user;
     private String userName;
     private Date deadline;
 
@@ -35,9 +34,6 @@ public class Task {
         return userName;
     }
 
-    public User getUser(){
-        return user;
-    }
 
     public String getName(){
         return name;
@@ -51,10 +47,6 @@ public class Task {
 
     public int getId() { return id; }
 
-    public void addUser(User user){
-        this.user = user;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -62,13 +54,13 @@ public class Task {
         Task task = (Task) o;
         return id == task.id &&
                 Objects.equals(name, task.name) &&
-                Objects.equals(user, task.user) &&
+                Objects.equals(userName, task.userName) &&
                 Objects.equals(deadline, task.deadline);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, user, deadline);
+        return Objects.hash(id, name, userName, deadline);
     }
 }
 

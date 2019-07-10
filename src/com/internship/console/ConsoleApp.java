@@ -35,9 +35,6 @@ public class ConsoleApp {
         int symbol = 0;
         Scanner symbolScanner = new Scanner(System.in);
         Service service = new Service();
-        service.getUserInfo();
-        service.getTaskInfo();
-        service.addRelationship();
 
         while (symbol != 9) {
             String userName;
@@ -121,7 +118,7 @@ public class ConsoleApp {
                         int size = service.getUser(userName).getTasks().size();
                         System.out.println("Delete " + size + " users tasks");
                         for (int i = 0; i < size; i++) {
-                            service.deleteTask(service.getUser(userName).getTask(0).getName());
+                            service.deleteTask(service.getUser(userName).getTask(0));
                         }
                         service.deleteUser(userName);
                         System.out.println("User: " + userName + " successfully deleted");
@@ -136,9 +133,6 @@ public class ConsoleApp {
                 error();
             }
         }
-
-        service.addTaskInfo();
-        service.addUserInfo();
     }
 
     public void error(){
@@ -186,14 +180,14 @@ public class ConsoleApp {
         System.out.println("Name of task: " + task.getName());
         System.out.println("Task id: " + task.getId());
         System.out.println("Task deadline: " + task.getDeadline());
-        System.out.println("Task user: " + task.getUser().getName() + "\n");
+        System.out.println("Task user: " + task.getUserName() + "\n");
     }
 
     public void outputUserInfo(User user){
         System.out.println("User name: " + user.getName());
         System.out.print("User tasks: ");
-        for (Task task : user.getTasks()){
-            System.out.print(task.getName() + "   ");
+        for (String userTask : user.getTasks()){
+            System.out.print(userTask + "   ");
         }
         System.out.println(" ");
     }

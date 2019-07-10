@@ -5,29 +5,30 @@ import java.util.*;
 
 public class User {
     private String name;
-    private List<Task> tasks = new ArrayList();
+    private List<String> tasks = new ArrayList();
 
     public String getName(){
         return name;
     }
 
-    public List<Task> getTasks(){
+    public List<String> getTasks(){
         return tasks;
     }
-    public Task getTask(int i){
+
+    public String getTask(int i){
         return tasks.get(i);
     }
 
     public void deleteUserTask(Task task){
-        tasks.remove(task);
+        tasks.remove(task.getName());
     }
 
     public User(String name){
         this.name = name;
     }
 
-    public void addTask(Task task) {
-        tasks.add(task);
+    public void addTask(String taskName) {
+        tasks.add(taskName);
     }
 
     @Override
@@ -35,11 +36,12 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(name, user.name);
+        return Objects.equals(name, user.name) &&
+                Objects.equals(tasks, user.tasks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, tasks);
     }
 }

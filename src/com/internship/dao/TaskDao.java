@@ -9,18 +9,31 @@ import java.util.*;
 
 public class TaskDao {
     TaskStore store = new TaskStore();
-    public void add(Task task){ store.tasks.put(task.getName(), task); }
 
-    public void delete(String name){ store.tasks.remove(name); }
+    public void add(Task task) throws IOException, ParseException {
+     Map<String, Task> map = new HashMap();
+     map = store.getInfo();
+     map.put(task.getName(),task);
+     store.addInfo(map);
+    }
 
-    public Task get(String name){ return store.tasks.get(name); }
+    public void delete(String name) throws IOException, ParseException {
+        Map<String, Task> map = new HashMap();
+        map = store.getInfo();
+        map.remove(name);
+        store.addInfo(map);
+    }
 
-    public Collection<Task> getAll(){ return store.tasks.values(); }
+    public Task get(String name) throws IOException, ParseException {
+        return store.getInfo().get(name);
+    }
 
-    public void addInfo() throws IOException { store.addInfo();}
+    public Collection<Task> getAll() throws IOException, ParseException {
+        return store.getInfo().values(); }
 
-    public void getInfo() throws IOException, ParseException { store.getInfo();}
 }
+
+
 //doa do 2class
 //input uotput, only in console
 //interfese or abstract, try creat

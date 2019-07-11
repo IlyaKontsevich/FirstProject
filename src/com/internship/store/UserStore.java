@@ -11,8 +11,8 @@ public class UserStore {
         Writer writer = new FileWriter("UserStore.txt");
 
         for (User user : users.values()){
-                writer.write(" " + user.getName());
-                for (String userTask : user.getTasks()) {
+                writer.write(" " + user.getName()); //write user name
+                for (String userTask : user.getTasks()) { //write user task
                     writer.write("," + userTask);
                 }
                 writer.write("\n");
@@ -24,23 +24,17 @@ public class UserStore {
         BufferedReader reader = new BufferedReader(new FileReader("UserStore.txt"));
         Map<String, User> users = new HashMap();
         while (reader.read() != -1) {
-            StringBuilder userName = new StringBuilder("");
-            char[] string = reader.readLine().toCharArray();
+            String[] string = reader.readLine().split(",");//get one string divided on ,
             int i = 0;
-            while (i < string.length && string[i] != ',') {
-                userName.append(string[i++]);
+
+            String userName = string[i++];//get user name
+            User user = new User(userName);//creat new user
+
+            while (i < string.length){//read users task
+                String userTaskName = string[i++];
+                user.addTask(userTaskName);
             }
-            i++;
-            User user = new User(userName.toString());
-            while (i < string.length){
-                StringBuilder userTaskName = new StringBuilder("");
-                while(i < string.length && string[i] != ','){
-                    userTaskName.append(string[i++]);
-                }
-                user.addTask(userTaskName.toString());
-                i++;
-            }
-            users.put(user.getName(),user);
+            users.put(user.getName(),user);//add user in Map
         }
         return users;
     }

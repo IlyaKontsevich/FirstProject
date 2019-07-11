@@ -25,28 +25,15 @@ public class TaskStore {
         Map<String, Task> tasks = new HashMap();
 
         while (reader.read() != -1) {
-            StringBuilder taskName = new StringBuilder("");
-            StringBuilder taskDeadLine = new StringBuilder("");
-            StringBuilder taskId = new StringBuilder("");
-            StringBuilder taskUserName = new StringBuilder("");
-            char[] string = reader.readLine().toCharArray();
-            int i = 0;
-            while (string[i] != ',') {
-                taskName.append(string[i++]);
-            } i++;
-            while (string[i] != ',') {
-                taskDeadLine.append(string[i++]);
-            } i++;
-            while (string[i] != ',') {
-                taskId.append(string[i++]);
-            } i++;
-            while (i < string.length) {
-                taskUserName.append(string[i++]);
-            } i++;
-            Task task = new Task(taskName.toString(),taskDeadLine.toString());
-            task.setUserName(taskUserName.toString());
-            task.setId(taskId.toString());
-            tasks.put(task.getName(),task);
+            String[] string = reader.readLine().split(",");//get one string divided on ,
+
+            String taskName = string[0];//read task name
+            String taskDeadLine = string[1];//read task dead line
+
+            Task task = new Task(taskName,taskDeadLine);//create new task
+            task.setId(string[2]);//get task Id
+            task.setUserName(string[3]);//get task user name
+            tasks.put(task.getName(),task);//add task in Map
             }
         return tasks;
     }

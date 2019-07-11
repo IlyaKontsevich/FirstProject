@@ -21,6 +21,10 @@ public class TaskStore {
     }
 
     public Map<String, Task> getInfo() throws IOException, ParseException {
+        if(! (new File("TaskStore.txt").isFile())){
+            File file = new File("TaskStore.txt");
+            file.createNewFile();
+        }
         BufferedReader reader = new BufferedReader (new FileReader("TaskStore.txt"));
         Map<String, Task> tasks = new HashMap();
 

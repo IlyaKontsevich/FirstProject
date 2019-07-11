@@ -21,6 +21,10 @@ public class UserStore {
     }
 
     public Map<String, User> getInfo() throws IOException {
+        if(! (new File("UserStore.txt").isFile())){
+            File file = new File("UserStore.txt");
+            file.createNewFile();
+        }
         BufferedReader reader = new BufferedReader(new FileReader("UserStore.txt"));
         Map<String, User> users = new HashMap();
         while (reader.read() != -1) {

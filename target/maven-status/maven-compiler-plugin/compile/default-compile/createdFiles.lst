@@ -1,0 +1,8 @@
+com/internship/console/ConsoleApp.class
+com/internship/model/Task.class
+com/internship/store/TaskStore.class
+com/internship/model/User.class
+com/internship/dao/TaskDao.class
+com/internship/dao/UserDao.class
+com/internship/service/Service.class
+com/internship/store/UserStore.class

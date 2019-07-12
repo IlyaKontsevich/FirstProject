@@ -1,3 +1,0 @@
- kiril
- alex,slep,eat,kep
- vlad,cry

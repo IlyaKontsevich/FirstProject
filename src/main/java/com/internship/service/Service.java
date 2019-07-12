@@ -17,16 +17,13 @@ public class Service {
         }
         if  (userDao.get(name) == null) {
             User user = new User(name);//create new user
-            task.setUserName(user.getName());//add user for task
-            user.addTask(task.getName()); //add task in users list
+            user.setId(userDao.getMaxId());//set user Id
+            task.setUserId(user.getId());//add user ID for task
             userDao.add(user); // add user in list
         }else{
-            User user;
-            user = userDao.get(name);//get user
-            user.addTask(task.getName());//add task in user list
-            userDao.add(user);//add changed user
-            task.setUserName(name); //add user for task
+            task.setUserId(userDao.get(name).getId()); //add user ID for task
         }
+        task.setId(taskDao.getMaxId());
         taskDao.add(task);
         return true;
     }
@@ -35,6 +32,7 @@ public class Service {
         if (userDao.get(user.getName()) != null){ //exist check
             return false;
         }
+        user.setId(userDao.getMaxId());//add user Id
         userDao.add(user);
         return true;
     }
@@ -46,12 +44,7 @@ public class Service {
     public boolean deleteTask(String name) throws IOException, ParseException {
         if(taskDao.get(name) == null){
             return false;
-        }
-        else {
-            User user;
-            user = userDao.get(taskDao.get(name).getUserName());
-            user.deleteUserTask(taskDao.get(name));//deleted task from users list
-            userDao.add(user);
+        }else {
             taskDao.delete(name);
             return true;
         }

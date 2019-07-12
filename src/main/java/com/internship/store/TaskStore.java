@@ -12,12 +12,25 @@ public class TaskStore {
         Writer writer = new FileWriter("TaskStore.txt");
 
         for (Task task : tasks.values()){
-            writer.write(" " + task.getName() + ",");
+            writer.write(" " + task.getId() + ",");
+            writer.write(task.getName() + ",");
             writer.write(task.getDeadline() + ",");
-            writer.write(task.getId() + ",");
-            writer.write(task.getUserName() + "\n");
+            writer.write(task.getUserId() + "\n");
         }
         writer.close();
+    }
+
+    public int getMaxId() throws IOException, ParseException {
+        Map<String, Task> tasks = new HashMap();
+        tasks = getInfo();
+        int maxId = -1;
+        for (Task task : tasks.values()){
+            if (task.getId() > maxId){
+                maxId = task.getId();
+            }
+        }
+        maxId++;
+        return maxId;
     }
 
     public Map<String, Task> getInfo() throws IOException, ParseException {
@@ -31,21 +44,15 @@ public class TaskStore {
         while (reader.read() != -1) {
             String[] string = reader.readLine().split(",");//get one string divided on ,
 
-            String taskName = string[0];//read task name
-            String taskDeadLine = string[1];//read task dead line
+            String taskName = string[1];//read task name
+            String taskDeadLine = string[2];//read task dead line
 
             Task task = new Task(taskName,taskDeadLine);//create new task
-            task.setId(string[2]);//get task Id
-            task.setUserName(string[3]);//get task user name
+            task.setId(string[0]);//get task Id
+            task.setUserId(string[3]);//get task user name
             tasks.put(task.getName(),task);//add task in Map
             }
         return tasks;
     }
 
 }
-
-//.Moven
-// moven project with one module
-// build produce JAR file
-// run application from Jar
-//JAR file

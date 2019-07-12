@@ -32,18 +32,18 @@ public class ConsoleApp {
     }
 
     public void scan() throws IOException, ParseException {
-        int symbol = 0;
+        String symbol = "";
         Scanner symbolScanner = new Scanner(System.in);
         Service service = new Service();
 
-        while (symbol != 9) {
+        while (!symbol.equals("9")) {
             String userName;
             String taskName;
             output();
-            symbol = symbolScanner.nextInt();
+            symbol = symbolScanner.nextLine();
             switch(symbol)
             {
-                case 1:
+                case "1":
                     taskName = inputTaskName();
                     userName = inputUserName();
                     while ( ! service.addTask(new Task(taskName,inputData()),userName) ){
@@ -54,7 +54,7 @@ public class ConsoleApp {
                     System.out.println("Task: " + taskName + " successfully added");
                     break;
 
-                case 2:
+                case "2":
                     userName = inputUserName();
                     while( ! service.addUser(new User(userName)) ){
                         System.out.println("A user with the same name already exists. Pleas input new user");
@@ -63,45 +63,45 @@ public class ConsoleApp {
                     System.out.println("User: " + userName + " successfully added");
                     break;
 
-                case 3:
+                case "3":
                     if (service.getAllTasks().size() != 0 ){
                         for (Task task : service.getAllTasks()){
-                            outputTaskInfo(task);
+                            outputTaskInfo(task,service.getAllUsers());
                         }
                     } else {
                         System.out.println("Empty task list");
                     }
                     break;
 
-                case 4:
+                case "4":
                     if (service.getAllUsers().size() != 0 ){
                         for (User user : service.getAllUsers()){
-                            outputUserInfo(user);
+                            outputUserInfo(user,service.getAllTasks());
                         }
                     } else {
                         System.out.println("Empty user list");
                     }
                     break;
 
-                case 5:
+                case "5":
                     taskName = inputTaskName();
                     if (service.getTask(taskName) == null){
                         System.out.println("A task with the same name don't exists");
                     }else {
-                        outputTaskInfo(service.getTask(taskName));
+                        outputTaskInfo(service.getTask(taskName),service.getAllUsers());
                     }
                     break;
 
-                case 6:
+                case "6":
                     userName = inputUserName();
                     if (service.getUser(userName) == null){
                         System.out.println("A user with the same name don't exists");
                     }else {
-                        outputUserInfo(service.getUser(userName));
+                        outputUserInfo(service.getUser(userName),service.getAllTasks());
                     }
                     break;
 
-                case 7:
+                case "7":
                     taskName = inputTaskName();
                     if ( ! service.deleteTask(taskName)){
                         System.out.println("A task with the same name don't exists");
@@ -110,22 +110,24 @@ public class ConsoleApp {
                     }
                     break;
 
-                case 8:
+                case "8":
                     userName = inputUserName();
                     if ( service.getUser(userName) == null){
                         System.out.println("A user with the same name don't exists");
                     }else {
-                        int size = service.getUser(userName).getTasks().size();
-                        System.out.println("Delete " + size + " users tasks");
-                        for (int i = 0; i < size; i++) {
-                            service.deleteTask(service.getUser(userName).getTask(0));
+                        System.out.print("Delete user task:");
+                        for (Task task : service.getAllTasks()){
+                            if (task.getUserId() == service.getUser(userName).getId()){
+                                System.out.print(" " + task.getName());
+                                service.deleteTask(task.getName());
+                            }
                         }
                         service.deleteUser(userName);
-                        System.out.println("User: " + userName + " successfully deleted");
+                        System.out.println("\nUser: " + userName + " successfully deleted");
                     }
                     break;
 
-                case 9:
+                case "9":
                     break;
 
 
@@ -136,18 +138,18 @@ public class ConsoleApp {
     }
 
     public void error(){
-        System.out.println("Error.");
+        System.out.println("Error, please enter another number");
     }
 
     public Date inputData(){
-        Scanner scaner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date deadline;
 
         while(true) {
             try {
                 System.out.println("Enter task deadline in format: dd-MM-yyyy ");
-                deadline = dateFormat.parse(scaner.next());
+                deadline = dateFormat.parse(scanner.next());
                 break;
             } catch (ParseException e) {
                 System.out.println("Date error. Please try again: ");
@@ -159,9 +161,10 @@ public class ConsoleApp {
     public String inputTaskName(){
         Scanner nameScanner = new Scanner(System.in);
         String taskName;
-
         System.out.println("Enter name of task: ");
         taskName = nameScanner.nextLine();
+
+        taskName = taskName.replace(","," ");
 
         return taskName;
     }
@@ -173,22 +176,32 @@ public class ConsoleApp {
         System.out.println("Enter name of User: ");
         userName = nameScanner.nextLine();
 
+        userName = userName.replace(","," ");
         return userName;
     }
 
-    public void outputTaskInfo(Task task){
-        System.out.println("Name of task: " + task.getName());
+    public void outputTaskInfo(Task task, Collection<User> users){
         System.out.println("Task id: " + task.getId());
+        System.out.println("Name of task: " + task.getName());
         System.out.println("Task deadline: " + task.getDeadline());
-        System.out.println("Task user: " + task.getUserName() + "\n");
+        System.out.print("Task user: " );
+        for (User user : users){
+            if(user.getId() == task.getUserId()){
+                System.out.println(user.getName() + "\n");
+                break;
+            }
+        }
     }
 
-    public void outputUserInfo(User user){
+    public void outputUserInfo(User user, Collection<Task> tasks){
         System.out.println("User name: " + user.getName());
+        System.out.println("User id: " + user.getId());
         System.out.print("User tasks: ");
-        for (String userTask : user.getTasks()){
-            System.out.print(userTask + "   ");
+        for (Task task : tasks){
+            if (user.getId() == task.getUserId()) {
+                System.out.print(task.getName() + "   ");
+            }
         }
-        System.out.println(" ");
+        System.out.println("\n");
     }
 }

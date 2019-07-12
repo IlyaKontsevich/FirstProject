@@ -18,6 +18,10 @@ public class UserDao {
         store.addInfo(map);
     }
 
+    public int getMaxId() throws IOException {
+        return store.getMaxId();
+    }
+
     public void delete(String name) throws IOException {
         Map<String, User> map = new HashMap();
         map = store.getInfo();

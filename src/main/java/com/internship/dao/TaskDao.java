@@ -24,6 +24,10 @@ public class TaskDao {
         store.addInfo(map);
     }
 
+    public int getMaxId() throws IOException, ParseException {
+        return store.getMaxId();
+    }
+
     public Task get(String name) throws IOException, ParseException {
         return store.getInfo().get(name);
     }
@@ -32,13 +36,3 @@ public class TaskDao {
         return store.getInfo().values(); }
 
 }
-
-
-//doa do 2class
-//input uotput, only in console
-//interfese or abstract, try creat
-//3 !!!! store do in file !!!!!
-//chek style idea
-//4 JAR/VAR  JAR+JAR, module
-//avatar in skype
-//

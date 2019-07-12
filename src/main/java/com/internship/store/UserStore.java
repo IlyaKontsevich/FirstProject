@@ -11,15 +11,25 @@ public class UserStore {
         Writer writer = new FileWriter("UserStore.txt");
 
         for (User user : users.values()){
-                writer.write(" " + user.getName()); //write user name
-                for (String userTask : user.getTasks()) { //write user task
-                    writer.write("," + userTask);
-                }
+                writer.write(" " + user.getId()); //write user name
+                writer.write("," + user.getName());
                 writer.write("\n");
         }
         writer.close();
     }
 
+    public int getMaxId() throws IOException {
+        Map<String, User> users = new HashMap();
+        users = getInfo();
+        int maxId = -1;
+        for (User user : users.values()){
+            if (user.getId() > maxId){
+                maxId = user.getId();
+            }
+        }
+        maxId++;
+        return maxId;
+    }
     public Map<String, User> getInfo() throws IOException {
         if(! (new File("UserStore.txt").isFile())){
             File file = new File("UserStore.txt");
@@ -29,15 +39,8 @@ public class UserStore {
         Map<String, User> users = new HashMap();
         while (reader.read() != -1) {
             String[] string = reader.readLine().split(",");//get one string divided on ,
-            int i = 0;
-
-            String userName = string[i++];//get user name
-            User user = new User(userName);//creat new user
-
-            while (i < string.length){//read users task
-                String userTaskName = string[i++];
-                user.addTask(userTaskName);
-            }
+            User user = new User(string[1]);//creat new user
+            user.setId(string[0]);
             users.put(user.getName(),user);//add user in Map
         }
         return users;

@@ -4,6 +4,7 @@ import com.internship.dao.*;
 import com.internship.model.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Collection;
 
@@ -11,7 +12,7 @@ public class Service {
     TaskDao taskDao = new TaskDao();
     UserDao userDao = new UserDao();
 
-    public boolean addTask(Task task,String name) throws IOException, ParseException {
+    public boolean addTask(Task task,String name) throws IOException, ParseException, SQLException, ClassNotFoundException {
         if (taskDao.get(task.getName()) != null){ // exist check
             return false;
         }
@@ -28,7 +29,7 @@ public class Service {
         return true;
     }
 
-    public boolean addUser(User user) throws IOException{
+    public boolean addUser(User user) throws IOException, SQLException, ClassNotFoundException {
         if (userDao.get(user.getName()) != null){ //exist check
             return false;
         }
@@ -37,11 +38,11 @@ public class Service {
         return true;
     }
 
-    public void deleteUser(String name) throws IOException{
+    public void deleteUser(String name) throws IOException, SQLException, ClassNotFoundException {
         userDao.delete(name);
     }
 
-    public boolean deleteTask(String name) throws IOException, ParseException {
+    public boolean deleteTask(String name) throws ParseException, SQLException, ClassNotFoundException {
         if(taskDao.get(name) == null){
             return false;
         }else {
@@ -51,16 +52,16 @@ public class Service {
     }
 
 
-    public Task getTask(String name) throws IOException, ParseException {
+    public Task getTask(String name) throws ParseException, SQLException, ClassNotFoundException {
         return taskDao.get(name); }
 
-    public User getUser(String name) throws IOException{
+    public User getUser(String name) throws SQLException, ClassNotFoundException {
         return userDao.get(name); }
 
-    public Collection<Task> getAllTasks() throws IOException, ParseException {
+    public Collection<Task> getAllTasks() throws ParseException, SQLException, ClassNotFoundException {
         return taskDao.getAll(); }
 
-    public Collection<User> getAllUsers() throws IOException{
+    public Collection<User> getAllUsers() throws SQLException, ClassNotFoundException {
         return userDao.getAll(); }
 
 }

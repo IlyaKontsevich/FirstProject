@@ -3,24 +3,33 @@ package com.internship.store;
 import com.internship.model.*;
 
 import java.io.*;
+import java.sql.*;
 import java.text.ParseException;
 import java.util.*;
 
 public class TaskStore {
 
-    public void addInfo(Map<String, Task> tasks) throws IOException{
-        Writer writer = new FileWriter("TaskStore.txt");
+    public void addInfo(Map<String, Task> tasks) throws ClassNotFoundException, SQLException {
+        String name = "kontsevich";
+        String password = "333498316";
+        String url = "jdbc:postgresql://127.0.0.1:5432/test_db";
+        Class.forName ("org.postgresql.Driver");
+        try (Connection connection = DriverManager.getConnection(url,name,password);
+             Statement statement = connection.createStatement()){
+              statement.executeUpdate("drop table tasks");
+              statement.executeUpdate("CREATE TABLE tasks(id int NOT NULL, name varchar NOT NULL, data varchar, userid int NOT NULL);");
+            for (Task task : tasks.values()){
+                int id = task.getId();
+                String taskName = task.getName();
+                String data = String.valueOf(task.getDeadline());
+                int userId = task.getUserId();
+                statement.executeUpdate("INSERT INTO tasks (id, name, data, userid) VALUES ('"+ id +"', '"+ taskName +"', '"+ data +"', '"+userId + "');");
+            }
 
-        for (Task task : tasks.values()){
-            writer.write(" " + task.getId() + ",");
-            writer.write(task.getName() + ",");
-            writer.write(task.getDeadline() + ",");
-            writer.write(task.getUserId() + "\n");
         }
-        writer.close();
     }
 
-    public int getMaxId() throws IOException, ParseException {
+    public int getMaxId() throws ParseException, SQLException, ClassNotFoundException {
         Map<String, Task> tasks = new HashMap();
         tasks = getInfo();
         int maxId = -1;
@@ -33,25 +42,27 @@ public class TaskStore {
         return maxId;
     }
 
-    public Map<String, Task> getInfo() throws IOException, ParseException {
-        if(! (new File("TaskStore.txt").isFile())){
-            File file = new File("TaskStore.txt");
-            file.createNewFile();
-        }
-        BufferedReader reader = new BufferedReader (new FileReader("TaskStore.txt"));
+
+    public Map<String, Task> getInfo() throws ParseException, ClassNotFoundException, SQLException {
+        String name = "kontsevich";
+        String password = "333498316";
+        String url = "jdbc:postgresql://127.0.0.1:5432/test_db";
+        Class.forName ("org.postgresql.Driver");
         Map<String, Task> tasks = new HashMap();
 
-        while (reader.read() != -1) {
-            String[] string = reader.readLine().split(",");//get one string divided on ,
-
-            String taskName = string[1];//read task name
-            String taskDeadLine = string[2];//read task dead line
-
-            Task task = new Task(taskName,taskDeadLine);//create new task
-            task.setId(string[0]);//get task Id
-            task.setUserId(string[3]);//get task user name
-            tasks.put(task.getName(),task);//add task in Map
+        try (Connection connection = DriverManager.getConnection(url,name,password);
+             Statement statement = connection.createStatement()){
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS tasks(id int NOT NULL, name varchar NOT NULL, data varchar, userid int NOT NULL);");
+            ResultSet resultSet =  statement.executeQuery("select * from tasks");
+            while (resultSet.next()){
+                String taskName = resultSet.getString(2);//read task name
+                String taskDeadLine = resultSet.getString(3);//read task dead line
+                Task task = new Task(taskName,taskDeadLine);//create new task
+                task.setId(resultSet.getInt(1));
+                task.setUserId(resultSet.getInt(4));
+                tasks.put(task.getName(),task);//add task in Map
             }
+        }
         return tasks;
     }
 

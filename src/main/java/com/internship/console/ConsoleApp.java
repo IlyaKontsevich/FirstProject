@@ -1,23 +1,20 @@
 package com.internship.console;
 
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import  com.internship.model.*;
-import com.internship.service.Service;
+import com.internship.service.*;
 
 public class ConsoleApp {
-    public static void main(String[] Args) throws SQLException {
+    public static void main(String[] Args){
         ConsoleApp apllication = new ConsoleApp();
 
         apllication.scan();
         System.out.println("EXIT");
     }
 
-
      public void output() {
-
         System.out.println();
         System.out.println("                Console application");
         System.out.println("    1.Add task");
@@ -31,10 +28,10 @@ public class ConsoleApp {
         System.out.println("    9.exit");
     }
 
-    public void scan() throws SQLException{
+    public void scan(){
         String symbol = "";
         Scanner symbolScanner = new Scanner(System.in);
-        Service service = new Service();
+        DbService service = new DbService();
 
         while (!symbol.equals("9")) {
             String userName;
@@ -66,7 +63,7 @@ public class ConsoleApp {
                 case "3":
                     if (service.getAllTasks().size() != 0 ){
                         for (Task task : service.getAllTasks()){
-                            outputTaskInfo(task,service.getAllUsers());
+                            outputTaskInfo(task, service.getAllUsers());
                         }
                     } else {
                         System.out.println("Empty task list");
@@ -76,7 +73,7 @@ public class ConsoleApp {
                 case "4":
                     if (service.getAllUsers().size() != 0 ){
                         for (User user : service.getAllUsers()){
-                            outputUserInfo(user,service.getAllTasks());
+                            outputUserInfo(user, service.getAllTasks());
                         }
                     } else {
                         System.out.println("Empty user list");
@@ -88,7 +85,7 @@ public class ConsoleApp {
                     if (service.getTask(taskName) == null){
                         System.out.println("A task with the same name don't exists");
                     }else {
-                        outputTaskInfo(service.getTask(taskName),service.getAllUsers());
+                        outputTaskInfo(service.getTask(taskName), service.getAllUsers());
                     }
                     break;
 
@@ -97,7 +94,7 @@ public class ConsoleApp {
                     if (service.getUser(userName) == null){
                         System.out.println("A user with the same name don't exists");
                     }else {
-                        outputUserInfo(service.getUser(userName),service.getAllTasks());
+                        outputUserInfo(service.getUser(userName), service.getAllTasks());
                     }
                     break;
 
@@ -115,13 +112,6 @@ public class ConsoleApp {
                     if ( service.getUser(userName) == null){
                         System.out.println("A user with the same name don't exists");
                     }else {
-                        System.out.print("Delete user task:");
-                        for (Task task : service.getAllTasks()){
-                            if (task.getUserId() == service.getUser(userName).getId()){
-                                System.out.print(" " + task.getName());
-                                service.deleteTask(task.getName());
-                            }
-                        }
                         service.deleteUser(userName);
                         System.out.println("\nUser: " + userName + " successfully deleted");
                     }
@@ -164,8 +154,11 @@ public class ConsoleApp {
         System.out.println("Enter name of task: ");
         taskName = nameScanner.nextLine();
 
+        while (taskName.length() == 0){
+            System.out.println("Empty string, please enter new task name");
+            taskName = inputTaskName();
+        }
         taskName = taskName.replace(","," ");
-
         return taskName;
     }
 
@@ -176,6 +169,10 @@ public class ConsoleApp {
         System.out.println("Enter name of User: ");
         userName = nameScanner.nextLine();
 
+        while (userName.length() == 0){
+            System.out.println("Empty string, please enter new user name");
+            userName = inputTaskName();
+        }
         userName = userName.replace(","," ");
         return userName;
     }

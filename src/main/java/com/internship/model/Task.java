@@ -22,7 +22,6 @@ public class Task {
         return userId;
     }
 
-
     public String getName(){
         return name;
     }

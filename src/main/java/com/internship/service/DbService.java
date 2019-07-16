@@ -3,16 +3,13 @@ package com.internship.service;
 import com.internship.dao.*;
 import com.internship.model.*;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.Collection;
 
-public class Service {
-    TaskDao taskDao = new TaskDao();
-    UserDao userDao = new UserDao();
+public class DbService implements IService<Task, User>{
+    TaskDbDao taskDao = new TaskDbDao();
+    UserDbDao userDao = new UserDbDao();
 
-    public boolean addTask(Task task,String name) throws SQLException{
+    public  boolean addTask(Task task,String name){
         if (taskDao.get(task.getName()) != null){ // exist check
             return false;
         }
@@ -27,7 +24,7 @@ public class Service {
         return true;
     }
 
-    public boolean addUser(User user) throws SQLException{
+    public boolean addUser(User user){
         if (userDao.get(user.getName()) != null){ //exist check
             return false;
         }
@@ -35,11 +32,15 @@ public class Service {
         return true;
     }
 
-    public void deleteUser(String name) throws SQLException{
+    public boolean deleteUser(String name){
+        if (userDao.get(name) == null){
+            return false;
+        }
         userDao.delete(name);
+        return true;
     }
 
-    public boolean deleteTask(String name) throws SQLException{
+    public boolean deleteTask(String name){
         if(taskDao.get(name) == null){
             return false;
         }else {
@@ -48,16 +49,16 @@ public class Service {
         }
     }
 
-    public Task getTask(String name) throws SQLException{
+    public Task getTask(String name){
         return taskDao.get(name); }
 
-    public User getUser(String name) throws SQLException{
+    public User getUser(String name){
         return userDao.get(name); }
 
-    public Collection<Task> getAllTasks() throws SQLException{
+    public Collection<Task> getAllTasks(){
         return taskDao.getAll(); }
 
-    public Collection<User> getAllUsers() throws SQLException{
+    public Collection<User> getAllUsers(){
         return userDao.getAll(); }
 
 }

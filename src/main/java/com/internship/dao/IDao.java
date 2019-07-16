@@ -1,7 +1,5 @@
 package com.internship.dao;
 
-import java.sql.Connection;
-import java.sql.Statement;
 import java.util.Collection;
 
 public interface IDao<T> {
@@ -14,10 +12,5 @@ public interface IDao<T> {
 
     boolean delete(String name);
 
-    Connection getConnection();
-
-    Statement getStatement();
-
-    void closeConnection(Connection connection);
 }
 

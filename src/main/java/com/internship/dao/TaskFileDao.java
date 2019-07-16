@@ -2,8 +2,6 @@ package com.internship.dao;
 
 import com.internship.model.*;
 import com.internship.store.*;
-import java.sql.Connection;
-import java.sql.Statement;
 import java.util.*;
 
 public class TaskFileDao implements IDao<Task>{
@@ -21,18 +19,6 @@ public class TaskFileDao implements IDao<Task>{
         map.remove(name);
         store.addInfo(map);
         return true;
-    }
-
-    public Connection getConnection() {
-        return null;
-    }
-
-    public Statement getStatement(){
-        return null;
-    }
-
-    public void closeConnection(Connection connection) {
-
     }
 
     public int getMaxId(){

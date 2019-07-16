@@ -2,8 +2,6 @@ package com.internship.dao;
 
 import com.internship.model.User;
 import com.internship.store.UserStore;
-import java.sql.Connection;
-import java.sql.Statement;
 import java.util.*;
 
 
@@ -27,18 +25,6 @@ public class UserFileDao implements IDao<User>{
         map.remove(name);
         store.addInfo(map);
         return true;
-    }
-
-    public Connection getConnection(){
-        return null;
-    }
-
-    public Statement getStatement(){
-        return null;
-    }
-
-    public void closeConnection(Connection connection) {
-
     }
 
     public Collection<User> getAll(){

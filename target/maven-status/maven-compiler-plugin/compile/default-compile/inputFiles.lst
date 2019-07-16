@@ -4,5 +4,6 @@
 /home/host/github/FirstProject/src/main/java/com/internship/console/ConsoleApp.java
 /home/host/github/FirstProject/src/main/java/com/internship/service/Service.java
 /home/host/github/FirstProject/src/main/java/com/internship/model/Task.java
+/home/host/github/FirstProject/src/main/java/com/internship/dao/IDao.java
 /home/host/github/FirstProject/src/main/java/com/internship/model/User.java
 /home/host/github/FirstProject/src/main/java/com/internship/store/UserStore.java

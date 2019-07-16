@@ -1,8 +1,5 @@
 package com.internship.model;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Task {
@@ -17,20 +14,8 @@ public class Task {
         this.deadline = data;
     }
 
-    public Task(String name, String deadLine) throws ParseException {
-        DateFormat format = new SimpleDateFormat("EEE MMM d yyyy", Locale.ENGLISH);
-        Date date = format.parse(deadLine);
-
-        this.deadline = date;
-        this.name = name;
-    }
-
     public void setUserId(int id){
         userId = id;
-    }
-
-    public void setUserId(String id){
-        userId = Integer.parseInt(id);
     }
 
     public int getUserId(){
@@ -45,8 +30,6 @@ public class Task {
     public Date getDeadline(){
         return deadline;
     }
-
-    public void setId(String id) { this.id = Integer.parseInt(id); }
 
     public int getId() { return id; }
 

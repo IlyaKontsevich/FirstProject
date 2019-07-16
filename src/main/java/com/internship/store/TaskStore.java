@@ -2,14 +2,13 @@ package com.internship.store;
 
 import com.internship.model.*;
 
-import java.io.*;
 import java.sql.*;
 import java.text.ParseException;
 import java.util.*;
 
 public class TaskStore {
 
-    public void addInfo(Map<String, Task> tasks) throws ClassNotFoundException, SQLException {
+    /*public void addInfo(Map<String, Task> tasks) throws ClassNotFoundException, SQLException {
         String name = "kontsevich";
         String password = "333498316";
         String url = "jdbc:postgresql://127.0.0.1:5432/test_db";
@@ -65,5 +64,5 @@ public class TaskStore {
         }
         return tasks;
     }
-
+*/
 }

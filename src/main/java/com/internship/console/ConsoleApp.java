@@ -1,6 +1,5 @@
 package com.internship.console;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,7 +8,7 @@ import  com.internship.model.*;
 import com.internship.service.Service;
 
 public class ConsoleApp {
-    public static void main(String[] Args) throws IOException, ParseException, SQLException, ClassNotFoundException {
+    public static void main(String[] Args) throws SQLException {
         ConsoleApp apllication = new ConsoleApp();
 
         apllication.scan();
@@ -32,7 +31,7 @@ public class ConsoleApp {
         System.out.println("    9.exit");
     }
 
-    public void scan() throws IOException, ParseException, SQLException, ClassNotFoundException {
+    public void scan() throws SQLException{
         String symbol = "";
         Scanner symbolScanner = new Scanner(System.in);
         Service service = new Service();
@@ -206,8 +205,3 @@ public class ConsoleApp {
         System.out.println("\n");
     }
 }
-//1. PostgreSQL + !!!PG Admin!!!! (docker (priority)) + (start postger)
-//2.creat DB
-//3. 2table: Task User
-//JDBC cinection + getAll user
-//

@@ -5,7 +5,7 @@ import com.internship.model.*;
 import java.io.*;
 import java.util.*;
 
-public class UserStore {
+public class UserStore implements IStore<User>{
 
     public void addInfo(Map<String, User> users){
         try {

@@ -6,6 +6,7 @@ com/internship/dao/UserFileDao.class
 com/internship/dao/UserDbDao.class
 com/internship/service/IService.class
 com/internship/service/DbService.class
+com/internship/store/IStore.class
 com/internship/store/TaskStore.class
 com/internship/model/User.class
 com/internship/dao/IDao.class

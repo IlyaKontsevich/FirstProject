@@ -11,3 +11,4 @@
 /home/host/github/FirstProject/src/main/java/com/internship/dao/TaskDbDao.java
 /home/host/github/FirstProject/src/main/java/com/internship/model/User.java
 /home/host/github/FirstProject/src/main/java/com/internship/service/IService.java
+/home/host/github/FirstProject/src/main/java/com/internship/store/IStore.java

@@ -8,7 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class TaskStore {
+public class TaskStore implements IStore<Task>{
 
     public void addInfo(Map<String, Task> tasks){
         try {

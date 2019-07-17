@@ -6,6 +6,7 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 public class TaskStore implements IStore<Task>{
@@ -45,7 +46,6 @@ public class TaskStore implements IStore<Task>{
             File file = new File("TaskStore.txt");
             file.createNewFile();
         }
-        DateFormat format = new SimpleDateFormat("EEE MMM d yyyy", Locale.ENGLISH);
         BufferedReader reader = new BufferedReader(new FileReader("TaskStore.txt"));
 
             while (reader.read() != -1) {
@@ -53,15 +53,11 @@ public class TaskStore implements IStore<Task>{
 
                 String taskName = string[1];//read task name
                 String taskDeadLine = string[2];//read task dead line
-                try {
-                    Date date = format.parse(taskDeadLine);
-                    Task task = new Task(taskName, date);//create new task
-                    task.setId(Integer.parseInt(string[0]));//get task Id
-                    task.setUserId(Integer.parseInt(string[3]));//get task user name
-                    tasks.put(task.getName(), task);//add task in Map
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                LocalDate date = LocalDate.parse(taskDeadLine);
+                Task task = new Task(taskName, date);//create new task
+                task.setId(Integer.parseInt(string[0]));//get task Id
+                task.setUserId(Integer.parseInt(string[3]));//get task user name
+                tasks.put(task.getName(), task);//add task in Map
             }
         }catch (IOException e){
             e.printStackTrace();

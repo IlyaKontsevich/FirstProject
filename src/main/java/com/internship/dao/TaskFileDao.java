@@ -7,11 +7,11 @@ import java.util.*;
 public class TaskFileDao implements IDao<Task>{
     TaskStore store = new TaskStore();
 
-    public boolean add(Task task){
+    public Task add(Task task){
         Map<String, Task> map = store.getInfo();
         map.put(task.getName(),task);
         store.addInfo(map);
-        return true;
+        return task;
     }
 
     public boolean delete(String name){

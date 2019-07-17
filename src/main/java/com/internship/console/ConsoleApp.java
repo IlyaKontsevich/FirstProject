@@ -1,16 +1,15 @@
 package com.internship.console;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 import  com.internship.model.*;
 import com.internship.service.*;
 
 public class ConsoleApp {
     public static void main(String[] Args){
-        ConsoleApp apllication = new ConsoleApp();
+        ConsoleApp application = new ConsoleApp();
 
-        apllication.scan();
+        application.scan();
         System.out.println("EXIT");
     }
 
@@ -131,21 +130,43 @@ public class ConsoleApp {
         System.out.println("Error, please enter another number");
     }
 
-    public Date inputData(){
+    public LocalDate inputData(){
         Scanner scanner = new Scanner(System.in);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        Date deadline;
-
-        while(true) {
-            try {
-                System.out.println("Enter task deadline in format: dd-MM-yyyy ");
-                deadline = dateFormat.parse(scanner.next());
-                break;
-            } catch (ParseException e) {
-                System.out.println("Date error. Please try again: ");
-            }
+        LocalDate date = LocalDate.now();
+        String yearS, monthS,dayOfMontshS;
+        System.out.println("Enter year of deadline");
+        yearS = scanner.nextLine();
+        while (!errorCheckForNumber(yearS) || (Integer.parseInt(yearS) < date.getYear())){
+            System.out.println("Error,please enter another year");
+            yearS = scanner.nextLine();
         }
-        return deadline;
+        int year = Integer.parseInt(yearS);
+        System.out.println("Enter month of deadline (1-12)");
+        monthS = scanner.nextLine();
+        while (!errorCheckForNumber(monthS) || ((year == date.getYear()) && (Integer.parseInt(monthS) < date.getMonthValue()))
+                || Integer.parseInt(monthS) < 1 || Integer.parseInt(monthS) > 12){
+            System.out.println("Error,please enter another month");
+            monthS = scanner.nextLine();
+        }
+        int month = Integer.parseInt(monthS);
+        System.out.println("Enter month of deadline (1-31)");
+        dayOfMontshS = scanner.nextLine();
+        while(!errorCheckForNumber(dayOfMontshS) || (year == date.getYear() && month == date.getMonthValue() && Integer.parseInt(dayOfMontshS)
+                < date.getDayOfMonth()) || Integer.parseInt(dayOfMontshS) < 1 || Integer.parseInt(dayOfMontshS) > 31){
+            System.out.println("Error,please enter another day");
+            dayOfMontshS = scanner.nextLine();
+        }
+        int dayOfMonth = Integer.parseInt(dayOfMontshS);
+        date = LocalDate.of(year,month,dayOfMonth);
+        return date;
+    }
+
+    public boolean errorCheckForNumber(String date){
+        if(date.chars().allMatch( Character::isDigit) && !date.isEmpty()){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     public String inputTaskName(){

@@ -1,15 +1,16 @@
 package com.internship.model;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class Task {
     private int id;
     private String name;
     private int userId;
-    private Date deadline;
+    private LocalDate deadline;
 
 
-    public Task(String name, Date data) {
+    public Task(String name, LocalDate data) {
         this.name = name;
         this.deadline = data;
     }
@@ -26,7 +27,7 @@ public class Task {
         return name;
     }
 
-    public Date getDeadline(){
+    public LocalDate getDeadline(){
         return deadline;
     }
 

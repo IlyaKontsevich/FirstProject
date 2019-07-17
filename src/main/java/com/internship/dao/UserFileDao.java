@@ -9,11 +9,11 @@ public class UserFileDao implements IDao<User>{
 
     UserStore store = new UserStore();
 
-    public boolean add(User user){
+    public User add(User user){
         Map<String, User> map = store.getInfo();
         map.put(user.getName(),user);
         store.addInfo(map);
-        return true;
+        return user;
     }
 
     public int getMaxId(){

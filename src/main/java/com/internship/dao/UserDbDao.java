@@ -6,24 +6,38 @@ import java.util.*;
 
 
 public class UserDbDao implements IDao<User>{
-    public boolean add(User user){
+
+    public UserDbDao() {
         try {
-            int rez = getStatement().executeUpdate("INSERT INTO  users (name) VALUES  ('" + user.getName() + "')");
+            Statement statement = getConnection().createStatement();
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY, name varchar NOT NULL);");
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public User add(User user){
+        try {
+            PreparedStatement preparedStatement = getStatement("INSERT INTO  users (name) VALUES  (?)");
+            preparedStatement.setString(1,user.getName());
+            int rez = preparedStatement.executeUpdate();
             closeConnection(getConnection());
             if (rez == 0) {
-                return false;
+                return null;
             } else {
-                return true;
+                return user;
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     public boolean delete(String name){
         try {
-            int rez = getStatement().executeUpdate("DELETE FROM users WHERE name = '" + name + "'");
+            PreparedStatement preparedStatement = getStatement("DELETE FROM users WHERE name = ?");
+            preparedStatement.setString(1,name);
+            int rez = preparedStatement.executeUpdate();
             closeConnection(getConnection());
             if (rez == 0) {
                 return false;
@@ -39,12 +53,9 @@ public class UserDbDao implements IDao<User>{
     public Collection<User> getAll(){
         Map<String, User> users = new HashMap();
         try {
-            ResultSet resultSet = getStatement().executeQuery("select * from users");
+            ResultSet resultSet = getStatement("Select * from users").executeQuery();
             while (resultSet.next()) {
-                String userName = resultSet.getString(2);//read user name
-                User user = new User(userName);//create new user
-                user.setId(resultSet.getInt(1));
-                users.put(user.getName(), user);//add user in Map
+                users.put(setUserInfo(resultSet).getName(),setUserInfo(resultSet));
             }
             closeConnection(getConnection());
             return users.values();
@@ -54,15 +65,27 @@ public class UserDbDao implements IDao<User>{
         return users.values();
     }
 
+    private User setUserInfo(ResultSet resultSet){
+        try {
+            String userName = resultSet.getString(2);//read user name
+            User user = new User(userName);//create new user
+            user.setId(resultSet.getInt(1));
+            return user;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }return null;
+    }
+
     public User get(String name){
         try {
-            ResultSet resultSet = getStatement().executeQuery("SELECT id FROM users WHERE name = '" + name + "'");
+            PreparedStatement preparedStatement =  getStatement("SELECT id, name FROM users WHERE name = ?");
+            preparedStatement.setString(1,name);
+            ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.next()) {
                 closeConnection(getConnection());
                 return null;
             } else {
-                User user = new User(name);
-                user.setId(resultSet.getInt("id"));
+                User user = setUserInfo(resultSet);
                 closeConnection(getConnection());
                 return user;
             }
@@ -82,18 +105,15 @@ public class UserDbDao implements IDao<User>{
         return null;
     }
 
-    public Statement getStatement(){
+    private PreparedStatement getStatement(String sql){
         try {
-            Statement statement = getConnection().createStatement();
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY, name varchar NOT NULL);");
-
-            return statement;
+            return getConnection().prepareStatement(sql);
         }catch (SQLException e){
             e.printStackTrace();
         }
         return null;
     }
-    public void closeConnection(Connection connection) {
+    private void closeConnection(Connection connection) {
         if (connection == null) return;
         try {
             connection.close();

@@ -4,7 +4,7 @@ import java.util.Collection;
 
 public interface IDao<T> {
 
-    boolean add(T type);
+    T add(T type);
 
     T get(String name);
 

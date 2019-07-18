@@ -1,0 +1,15 @@
+/home/host/github/FirstProject/src/main/java/com/internship/dao/UserFileDao.java
+/home/host/github/FirstProject/src/main/java/com/internship/dao/UserDbDao.java
+/home/host/github/FirstProject/src/main/java/com/internship/Main.java
+/home/host/github/FirstProject/src/main/java/com/internship/store/TaskStore.java
+/home/host/github/FirstProject/src/main/java/com/internship/console/ConsoleApp.java
+/home/host/github/FirstProject/src/main/java/com/internship/model/Task.java
+/home/host/github/FirstProject/src/main/java/com/internship/dao/IDao.java
+/home/host/github/FirstProject/src/main/java/com/internship/store/UserStore.java
+/home/host/github/FirstProject/src/main/java/com/internship/dao/TaskFileDao.java
+/home/host/github/FirstProject/src/main/java/com/internship/service/DbService.java
+/home/host/github/FirstProject/src/main/java/com/internship/service/FileService.java
+/home/host/github/FirstProject/src/main/java/com/internship/dao/TaskDbDao.java
+/home/host/github/FirstProject/src/main/java/com/internship/model/User.java
+/home/host/github/FirstProject/src/main/java/com/internship/service/IService.java
+/home/host/github/FirstProject/src/main/java/com/internship/store/IStore.java

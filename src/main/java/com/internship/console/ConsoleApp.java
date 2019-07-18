@@ -4,14 +4,15 @@ package com.internship.console;
 import com.internship.model.Task;
 import com.internship.model.User;
 import com.internship.service.IService;
+
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Scanner;
 
 public class ConsoleApp {
-    private static IService<Task,User> service;
+    private static IService<Task, User> service;
 
-    public ConsoleApp(IService<Task,User> service){
+    public ConsoleApp(IService<Task, User> service){
         this.service = service;
     }
 

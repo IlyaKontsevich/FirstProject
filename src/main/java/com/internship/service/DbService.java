@@ -1,8 +1,6 @@
 package com.internship.service;
 
 import com.internship.dao.IDao;
-import com.internship.dao.TaskDbDao;
-import com.internship.dao.UserDbDao;
 import com.internship.model.Task;
 import com.internship.model.User;
 

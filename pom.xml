@@ -25,15 +25,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main</directory><!-- from -->
-                <includes><!-- what -->
-                    <include>TaskStore.txt</include>
-                    <include>UserStore.txt</include>
-                </includes>
-            </resource>
-        </resources>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
                 <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
@@ -84,7 +75,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.com.com.internship.console.ConsoleApp</mainClass>
+                            <mainClass>com.internship.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -15,7 +15,7 @@ public class FileService implements IService<Task, User> {
         this.taskDao = taskDao;
         this.userDao = userDao;
     }
-    public boolean addTask(Task task,String name){
+    public boolean addTask(Task task, String name){
         if (taskDao.get(task.getName()) != null){ // exist check
             return false;
         }

@@ -3,7 +3,7 @@ package com.internship.service;
 import java.util.Collection;
 
 public interface IService <T,U> {
-    boolean addTask(T type,String name);
+    boolean addTask(T type, String name);
 
     boolean addUser(U type);
 

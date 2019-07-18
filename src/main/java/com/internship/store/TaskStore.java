@@ -1,15 +1,13 @@
 package com.internship.store;
 
-import com.internship.model.*;
+import com.internship.model.Task;
 
 import java.io.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-public class TaskStore implements IStore<Task>{
+public class TaskStore implements IStore<Task> {
 
     public void addInfo(Map<String, Task> tasks){
         try {

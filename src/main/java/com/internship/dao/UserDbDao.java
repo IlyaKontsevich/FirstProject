@@ -1,11 +1,14 @@
 package com.internship.dao;
 
 import com.internship.model.User;
+
 import java.sql.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 
-public class UserDbDao implements IDao<User>{
+public class UserDbDao implements IDao<User> {
 
     public UserDbDao() {
         try {

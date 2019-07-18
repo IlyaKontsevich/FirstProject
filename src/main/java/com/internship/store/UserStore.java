@@ -1,11 +1,12 @@
 package com.internship.store;
 
-import com.internship.model.*;
+import com.internship.model.User;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-public class UserStore implements IStore<User>{
+public class UserStore implements IStore<User> {
 
     public void addInfo(Map<String, User> users){
         try {

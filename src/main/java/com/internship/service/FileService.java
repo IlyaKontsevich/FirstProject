@@ -1,14 +1,20 @@
 package com.internship.service;
 
-import com.internship.dao.*;
-import com.internship.model.*;
+import com.internship.dao.TaskFileDao;
+import com.internship.dao.UserFileDao;
+import com.internship.model.Task;
+import com.internship.model.User;
 
 import java.util.Collection;
 
-public class FileService implements IService<Task, User>{
-    TaskFileDao taskDao = new TaskFileDao();
-    UserFileDao userDao = new UserFileDao();
+public class FileService implements IService<Task, User> {
+    private TaskFileDao taskDao;
+    private UserFileDao userDao;
 
+    public FileService(TaskFileDao taskDao, UserFileDao userDao) {
+        this.taskDao = taskDao;
+        this.userDao = userDao;
+    }
     public boolean addTask(Task task,String name){
         if (taskDao.get(task.getName()) != null){ // exist check
             return false;

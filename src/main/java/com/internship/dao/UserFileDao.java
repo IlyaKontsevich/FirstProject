@@ -2,10 +2,12 @@ package com.internship.dao;
 
 import com.internship.model.User;
 import com.internship.store.UserStore;
-import java.util.*;
+
+import java.util.Collection;
+import java.util.Map;
 
 
-public class UserFileDao implements IDao<User>{
+public class UserFileDao implements IDao<User> {
 
     UserStore store = new UserStore();
 

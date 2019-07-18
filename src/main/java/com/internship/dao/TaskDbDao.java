@@ -1,10 +1,11 @@
 package com.internship.dao;
 
-import com.internship.model.*;
+import com.internship.model.Task;
 
 import java.sql.*;
-import java.sql.Date;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TaskDbDao implements IDao<Task> {
 
@@ -22,7 +23,7 @@ public class TaskDbDao implements IDao<Task> {
         try {
             PreparedStatement preparedStatement = getStatement("INSERT INTO  tasks (name, deadLine, userId) VALUES  (?,?,?)");
             preparedStatement.setString(1, task.getName());
-            preparedStatement.setDate(2, java.sql.Date.valueOf(task.getDeadline()));
+            preparedStatement.setDate(2, Date.valueOf(task.getDeadline()));
             preparedStatement.setInt(3, task.getUserId());
             int rez = preparedStatement.executeUpdate();
             closeConnection(getConnection());

@@ -1,15 +1,23 @@
 package com.internship.service;
 
-import com.internship.dao.*;
-import com.internship.model.*;
+import com.internship.dao.IDao;
+import com.internship.dao.TaskDbDao;
+import com.internship.dao.UserDbDao;
+import com.internship.model.Task;
+import com.internship.model.User;
 
 import java.util.Collection;
 
-public class DbService implements IService<Task, User>{
-    TaskDbDao taskDao = new TaskDbDao();
-    UserDbDao userDao = new UserDbDao();
+public class DbService implements IService<Task, User> {
+    private IDao<Task> taskDao;
+    private IDao<User> userDao;
 
-    public  boolean addTask(Task task,String name){
+    public DbService(IDao taskDao, IDao userDao) {
+        this.taskDao = taskDao;
+        this.userDao = userDao;
+    }
+
+    public  boolean addTask(Task task, String name){
         if (taskDao.get(task.getName()) != null){ // exist check
             return false;
         }

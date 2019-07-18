@@ -1,7 +1,7 @@
 package com.internship.model;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Objects;
 
 public class Task {
     private int id;

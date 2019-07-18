@@ -1,16 +1,18 @@
 package com.internship.console;
 
+
+import com.internship.model.Task;
+import com.internship.model.User;
+import com.internship.service.IService;
 import java.time.LocalDate;
-import java.util.*;
-import  com.internship.model.*;
-import com.internship.service.*;
+import java.util.Collection;
+import java.util.Scanner;
 
 public class ConsoleApp {
-    public static void main(String[] Args){
-        ConsoleApp application = new ConsoleApp();
+    private static IService<Task,User> service;
 
-        application.scan();
-        System.out.println("EXIT");
+    public ConsoleApp(IService<Task,User> service){
+        this.service = service;
     }
 
      public void output() {
@@ -30,7 +32,6 @@ public class ConsoleApp {
     public void scan(){
         String symbol = "";
         Scanner symbolScanner = new Scanner(System.in);
-        DbService service = new DbService();
 
         while (!symbol.equals("9")) {
             String userName;

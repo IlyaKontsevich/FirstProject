@@ -1,11 +1,13 @@
 package com.internship.dao;
 
-import com.internship.model.*;
-import com.internship.store.*;
-import java.util.*;
+import com.internship.model.Task;
+import com.internship.store.TaskStore;
 
-public class TaskFileDao implements IDao<Task>{
-    TaskStore store = new TaskStore();
+import java.util.Collection;
+import java.util.Map;
+
+public class TaskFileDao implements IDao<Task> {
+    private TaskStore store = new TaskStore();
 
     public Task add(Task task){
         Map<String, Task> map = store.getInfo();

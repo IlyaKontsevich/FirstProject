@@ -11,6 +11,5 @@ public interface IDao<T> {
     Collection<T> getAll();
 
     boolean delete(String name);
-
 }
 

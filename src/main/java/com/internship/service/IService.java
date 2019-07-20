@@ -2,20 +2,13 @@ package com.internship.service;
 
 import java.util.Collection;
 
-public interface IService <T,U> {
-    boolean addTask(T type, String name);
+public interface IService <T> {
+    T add(T type);
 
-    boolean addUser(U type);
+    boolean delete(String name);
 
-    boolean deleteUser(String name);
+    T get(String name);
 
-    boolean deleteTask(String name);
+    Collection<T> getAll();
 
-    T getTask(String name);
-
-    U getUser(String name);
-
-    Collection<T> getAllTasks();
-
-    Collection<U> getAllUsers();
 }

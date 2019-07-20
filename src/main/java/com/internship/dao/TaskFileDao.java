@@ -13,7 +13,7 @@ public class TaskFileDao implements IDao<Task> {
         Map<String, Task> map = store.getInfo();
         map.put(task.getName(),task);
         store.addInfo(map);
-        return task;
+        return get(task.getName());
     }
 
     public boolean delete(String name){

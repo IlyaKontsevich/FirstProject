@@ -30,7 +30,7 @@ public class TaskDbDao implements IDao<Task> {
             if (rez == 0) {
                 return null;
             } else {
-                return task;
+                return get(task.getName());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,8 +103,8 @@ public class TaskDbDao implements IDao<Task> {
     private Task setTaskInfo(ResultSet resultSet){
         try {
             String taskName = resultSet.getString("name");//read task name
-            Date taskDeadLine = resultSet.getDate("deadline");//read task dead line
-            Task task = new Task(taskName, taskDeadLine.toLocalDate());//create new task
+            Task task = new Task(taskName);
+            task.setDeadline(resultSet.getDate("deadline").toLocalDate());//read task dead line
             task.setId(resultSet.getInt("id"));
             task.setUserId(resultSet.getInt("userid"));
             return task;

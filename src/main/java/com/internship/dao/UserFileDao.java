@@ -15,7 +15,7 @@ public class UserFileDao implements IDao<User> {
         Map<String, User> map = store.getInfo();
         map.put(user.getName(),user);
         store.addInfo(map);
-        return user;
+        return get(user.getName());
     }
 
     public int getMaxId(){

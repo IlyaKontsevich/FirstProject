@@ -10,10 +10,12 @@ import java.util.Collection;
 import java.util.Scanner;
 
 public class ConsoleApp {
-    private static IService<Task, User> service;
+    private IService<User> userService;
+    private IService<Task> taskService;
 
-    public ConsoleApp(IService<Task, User> service){
-        this.service = service;
+    public ConsoleApp(IService<Task> taskService, IService<User> userService) {
+        this.taskService = taskService;
+        this.userService = userService;
     }
 
      public void output() {
@@ -35,36 +37,50 @@ public class ConsoleApp {
         Scanner symbolScanner = new Scanner(System.in);
 
         while (!symbol.equals("9")) {
-            String userName;
-            String taskName;
+            User user;
+            Task task;
             output();
             symbol = symbolScanner.nextLine();
             switch(symbol)
             {
                 case "1":
-                    taskName = inputTaskName();
-                    userName = inputUserName();
-                    while ( ! service.addTask(new Task(taskName,inputData()),userName) ){
-                        System.out.println("A task with the same name already exists. Pleas input new task");
-                        taskName = inputTaskName();
-                        userName = inputUserName();
+                    task = inputTask();
+                    user = inputUser();
+                    if(userService.get(user.getName()) == null){
+                        user = userService.add(user);
+                        System.out.println(user.getId());
+                        task.setUserId(user.getId());
+                        task.setDeadline(inputData());
+                        task = taskService.add(task);
+                        System.out.println("User: " + user.getName() + " with id: " +user.getId()+ " successfully added");
+                        System.out.println("Task: " + task.getName() + " with id: " + task.getId()+ " successfully added");
+                    } else{
+                        user = userService.get(user.getName());
+                        task.setUserId(user.getId());
+                        task.setDeadline(inputData());
+                        while ((task = taskService.add(task)) == null){
+                            System.out.println("Tsk with same name are exists, please enter new task: ");
+                            task = inputTask();
+                            task.setUserId(user.getId());
+                            task.setDeadline(inputData());
+                        }
+                        System.out.println("Task: " + task.getName() + " with id: " + task.getId()+ " successfully added");
                     }
-                    System.out.println("Task: " + taskName + " successfully added");
                     break;
 
                 case "2":
-                    userName = inputUserName();
-                    while( ! service.addUser(new User(userName)) ){
+                    user = inputUser();
+                    while((user = userService.add(user)) == null){
                         System.out.println("A user with the same name already exists. Pleas input new user");
-                        userName = inputUserName();
+                        user = inputUser();
                     }
-                    System.out.println("User: " + userName + " successfully added");
+                    System.out.println("User: " + user.getName() + "with id: " + user.getId()+ " successfully added");
                     break;
 
                 case "3":
-                    if (service.getAllTasks().size() != 0 ){
-                        for (Task task : service.getAllTasks()){
-                            outputTaskInfo(task, service.getAllUsers());
+                    if (taskService.getAll().size() != 0 ){
+                        for (Task task2 : taskService.getAll()){
+                            outputTaskInfo(task2, userService.getAll());
                         }
                     } else {
                         System.out.println("Empty task list");
@@ -72,9 +88,9 @@ public class ConsoleApp {
                     break;
 
                 case "4":
-                    if (service.getAllUsers().size() != 0 ){
-                        for (User user : service.getAllUsers()){
-                            outputUserInfo(user, service.getAllTasks());
+                    if (userService.getAll().size() != 0 ){
+                        for (User user2 : userService.getAll()){
+                            outputUserInfo(user2, taskService.getAll());
                         }
                     } else {
                         System.out.println("Empty user list");
@@ -82,39 +98,39 @@ public class ConsoleApp {
                     break;
 
                 case "5":
-                    taskName = inputTaskName();
-                    if (service.getTask(taskName) == null){
+                    task = inputTask();
+                    if (taskService.get(task.getName()) == null){
                         System.out.println("A task with the same name don't exists");
                     }else {
-                        outputTaskInfo(service.getTask(taskName), service.getAllUsers());
+                        outputTaskInfo(taskService.get(task.getName()), userService.getAll());
                     }
                     break;
 
                 case "6":
-                    userName = inputUserName();
-                    if (service.getUser(userName) == null){
+                    user = inputUser();
+                    if (userService.get(user.getName()) == null){
                         System.out.println("A user with the same name don't exists");
                     }else {
-                        outputUserInfo(service.getUser(userName), service.getAllTasks());
+                        outputUserInfo(userService.get(user.getName()), taskService.getAll());
                     }
                     break;
 
                 case "7":
-                    taskName = inputTaskName();
-                    if ( ! service.deleteTask(taskName)){
+                    task = inputTask();
+                    if ( ! taskService.delete(task.getName())){
                         System.out.println("A task with the same name don't exists");
                     }else {
-                        System.out.println("Task: " + taskName + " successfully deleted");
+                        System.out.println("Task: " + task.getName() + " successfully deleted");
                     }
                     break;
 
                 case "8":
-                    userName = inputUserName();
-                    if ( service.getUser(userName) == null){
+                    user = inputUser();
+                    if ( userService.get(user.getName()) == null){
                         System.out.println("A user with the same name don't exists");
                     }else {
-                        service.deleteUser(userName);
-                        System.out.println("\nUser: " + userName + " successfully deleted");
+                        userService.delete(user.getName());
+                        System.out.println("\nUser: " + user.getName() + " successfully deleted");
                     }
                     break;
 
@@ -171,21 +187,21 @@ public class ConsoleApp {
         }
     }
 
-    public String inputTaskName(){
+    public Task inputTask(){
         Scanner nameScanner = new Scanner(System.in);
         String taskName;
         System.out.println("Enter name of task: ");
         taskName = nameScanner.nextLine();
 
         while (taskName.length() == 0){
-            System.out.println("Empty string, please enter new task name");
-            taskName = inputTaskName();
+            System.out.println("Empty string, please enter new task name:");
+            taskName = nameScanner.nextLine();
         }
         taskName = taskName.replace(","," ");
-        return taskName;
+        return new Task(taskName);
     }
 
-    public String inputUserName(){
+    public User inputUser(){
         Scanner nameScanner = new Scanner(System.in);
         String userName;
 
@@ -193,11 +209,11 @@ public class ConsoleApp {
         userName = nameScanner.nextLine();
 
         while (userName.length() == 0){
-            System.out.println("Empty string, please enter new user name");
-            userName = inputTaskName();
+            System.out.println("Empty string, please enter new user name:");
+            userName = nameScanner.nextLine();
         }
         userName = userName.replace(","," ");
-        return userName;
+        return new User(userName);
     }
 
     public void outputTaskInfo(Task task, Collection<User> users){

@@ -10,11 +10,13 @@ public class Task {
     private LocalDate deadline;
 
 
-    public Task(String name, LocalDate data) {
+    public Task(String name) {
         this.name = name;
-        this.deadline = data;
     }
 
+    public void setDeadline(LocalDate date){
+        this.deadline = date;
+    }
     public void setUserId(int id){
         userId = id;
     }

@@ -28,7 +28,7 @@ public class UserDbDao implements IDao<User> {
             if (rez == 0) {
                 return null;
             } else {
-                return user;
+                return get(user.getName());
             }
         }catch (SQLException e){
             e.printStackTrace();

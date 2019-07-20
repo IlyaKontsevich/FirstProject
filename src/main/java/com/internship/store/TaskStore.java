@@ -50,9 +50,8 @@ public class TaskStore implements IStore<Task> {
                 String[] string = reader.readLine().split(",");//get one string divided on ,
 
                 String taskName = string[1];//read task name
-                String taskDeadLine = string[2];//read task dead line
-                LocalDate date = LocalDate.parse(taskDeadLine);
-                Task task = new Task(taskName, date);//create new task
+                Task task = new Task(taskName);//create new task
+                task.setDeadline(LocalDate.parse(string[2]));//read task dead line
                 task.setId(Integer.parseInt(string[0]));//get task Id
                 task.setUserId(Integer.parseInt(string[3]));//get task user name
                 tasks.put(task.getName(), task);//add task in Map

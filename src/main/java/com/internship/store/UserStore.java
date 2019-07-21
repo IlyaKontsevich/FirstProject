@@ -1,11 +1,13 @@
 package com.internship.store;
 
 import com.internship.model.User;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class UserStore implements IStore<User> {
 
     public void addInfo(Map<String, User> users){

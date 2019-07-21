@@ -1,12 +1,14 @@
 package com.internship.store;
 
 import com.internship.model.Task;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class TaskStore implements IStore<Task> {
 
     public void addInfo(Map<String, Task> tasks){

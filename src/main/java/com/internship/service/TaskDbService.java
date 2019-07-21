@@ -3,14 +3,20 @@ package com.internship.service;
 import com.internship.dao.IDao;
 import com.internship.dao.TaskDbDao;
 import com.internship.model.Task;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.Collection;
 
+@Component
 public class TaskDbService implements IService<Task> {
+    @Autowired
     private TaskDbDao dao;
 
+    /*@Autowired
     public TaskDbService(TaskDbDao dao) {
         this.dao = dao;
-    }
+    }*/
 
     public  Task add(Task task){
         for (Task task2 : dao.getAll()){

@@ -4,15 +4,21 @@ import com.internship.dao.TaskFileDao;
 import com.internship.dao.UserFileDao;
 import com.internship.model.Task;
 import com.internship.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
+@Component
 public class TaskFileService implements IService<Task> {
+    @Autowired
     private TaskFileDao dao;
 
+ /*   @Autowired
     public TaskFileService(TaskFileDao dao) {
         this.dao = dao;
     }
+*/
     public Task add(Task task){
         for (Task task2 : dao.getAll()){
             if(task.getUserId() == task2.getUserId()){

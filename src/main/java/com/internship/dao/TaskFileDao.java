@@ -2,11 +2,15 @@ package com.internship.dao;
 
 import com.internship.model.Task;
 import com.internship.store.TaskStore;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Map;
 
+@Component
 public class TaskFileDao implements IDao<Task> {
+    //@Autowired
     private TaskStore store = new TaskStore();
 
     public Task add(Task task){

@@ -4,19 +4,28 @@ package com.internship.console;
 import com.internship.model.Task;
 import com.internship.model.User;
 import com.internship.service.IService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Scanner;
 
+@Component("console")
 public class ConsoleApp {
+    @Autowired
+    @Qualifier("userDbService")
     private IService<User> userService;
+    @Autowired
+    @Qualifier("taskDbService")
     private IService<Task> taskService;
 
-    public ConsoleApp(IService<Task> taskService, IService<User> userService) {
+    /*@Autowired
+    public ConsoleApp(@Qualifier("taskDbService") IService<Task> taskService,@Qualifier("userDbService") IService<User> userService) {
         this.taskService = taskService;
         this.userService = userService;
-    }
+    }*/
 
      public void output() {
         System.out.println();
@@ -48,7 +57,6 @@ public class ConsoleApp {
                     user = inputUser();
                     if(userService.get(user.getName()) == null){
                         user = userService.add(user);
-                        System.out.println(user.getId());
                         task.setUserId(user.getId());
                         task.setDeadline(inputData());
                         task = taskService.add(task);
@@ -74,7 +82,7 @@ public class ConsoleApp {
                         System.out.println("A user with the same name already exists. Pleas input new user");
                         user = inputUser();
                     }
-                    System.out.println("User: " + user.getName() + "with id: " + user.getId()+ " successfully added");
+                    System.out.println("User: " + user.getName() + " with id: " + user.getId()+ " successfully added");
                     break;
 
                 case "3":

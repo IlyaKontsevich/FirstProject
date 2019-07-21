@@ -2,14 +2,16 @@ package com.internship.dao;
 
 import com.internship.model.User;
 import com.internship.store.UserStore;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Map;
 
-
+@Component
 public class UserFileDao implements IDao<User> {
-
-    UserStore store = new UserStore();
+    @Autowired
+    private UserStore store;
 
     public User add(User user){
         Map<String, User> map = store.getInfo();

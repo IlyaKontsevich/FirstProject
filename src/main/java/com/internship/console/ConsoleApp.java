@@ -5,29 +5,20 @@ import com.internship.model.Task;
 import com.internship.model.User;
 import com.internship.service.IService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Scanner;
 
-@Component("console")
+@Component
 public class ConsoleApp {
     @Autowired
-    @Qualifier("userDbService")
     private IService<User> userService;
     @Autowired
-    @Qualifier("taskDbService")
     private IService<Task> taskService;
 
-    /*@Autowired
-    public ConsoleApp(@Qualifier("taskDbService") IService<Task> taskService,@Qualifier("userDbService") IService<User> userService) {
-        this.taskService = taskService;
-        this.userService = userService;
-    }*/
-
-     public void output() {
+    public void output() {
         System.out.println();
         System.out.println("                Console application");
         System.out.println("    1.Add task");
@@ -41,7 +32,7 @@ public class ConsoleApp {
         System.out.println("    9.exit");
     }
 
-    public void scan(){
+    public void scan() {
         String symbol = "";
         Scanner symbolScanner = new Scanner(System.in);
 
@@ -50,44 +41,43 @@ public class ConsoleApp {
             Task task;
             output();
             symbol = symbolScanner.nextLine();
-            switch(symbol)
-            {
+            switch (symbol) {
                 case "1":
                     task = inputTask();
                     user = inputUser();
-                    if(userService.get(user.getName()) == null){
+                    if (userService.get(user.getName()) == null) {
                         user = userService.add(user);
                         task.setUserId(user.getId());
                         task.setDeadline(inputData());
                         task = taskService.add(task);
-                        System.out.println("User: " + user.getName() + " with id: " +user.getId()+ " successfully added");
-                        System.out.println("Task: " + task.getName() + " with id: " + task.getId()+ " successfully added");
-                    } else{
+                        System.out.println("User: " + user.getName() + " with id: " + user.getId() + " successfully added");
+                        System.out.println("Task: " + task.getName() + " with id: " + task.getId() + " successfully added");
+                    } else {
                         user = userService.get(user.getName());
                         task.setUserId(user.getId());
                         task.setDeadline(inputData());
-                        while ((task = taskService.add(task)) == null){
-                            System.out.println("Tsk with same name are exists, please enter new task: ");
+                        while ((task = taskService.add(task)) == null) {
+                            System.out.println("Task with same name are exists, please enter new task: ");
                             task = inputTask();
                             task.setUserId(user.getId());
                             task.setDeadline(inputData());
                         }
-                        System.out.println("Task: " + task.getName() + " with id: " + task.getId()+ " successfully added");
+                        System.out.println("Task: " + task.getName() + " with id: " + task.getId() + " successfully added");
                     }
                     break;
 
                 case "2":
                     user = inputUser();
-                    while((user = userService.add(user)) == null){
+                    while ((user = userService.add(user)) == null) {
                         System.out.println("A user with the same name already exists. Pleas input new user");
                         user = inputUser();
                     }
-                    System.out.println("User: " + user.getName() + " with id: " + user.getId()+ " successfully added");
+                    System.out.println("User: " + user.getName() + " with id: " + user.getId() + " successfully added");
                     break;
 
                 case "3":
-                    if (taskService.getAll().size() != 0 ){
-                        for (Task task2 : taskService.getAll()){
+                    if (taskService.getAll().size() != 0) {
+                        for (Task task2 : taskService.getAll()) {
                             outputTaskInfo(task2, userService.getAll());
                         }
                     } else {
@@ -96,8 +86,8 @@ public class ConsoleApp {
                     break;
 
                 case "4":
-                    if (userService.getAll().size() != 0 ){
-                        for (User user2 : userService.getAll()){
+                    if (userService.getAll().size() != 0) {
+                        for (User user2 : userService.getAll()) {
                             outputUserInfo(user2, taskService.getAll());
                         }
                     } else {
@@ -107,38 +97,38 @@ public class ConsoleApp {
 
                 case "5":
                     task = inputTask();
-                    if (taskService.get(task.getName()) == null){
+                    if (taskService.get(task.getName()) == null) {
                         System.out.println("A task with the same name don't exists");
-                    }else {
+                    } else {
                         outputTaskInfo(taskService.get(task.getName()), userService.getAll());
                     }
                     break;
 
                 case "6":
                     user = inputUser();
-                    if (userService.get(user.getName()) == null){
+                    if (userService.get(user.getName()) == null) {
                         System.out.println("A user with the same name don't exists");
-                    }else {
+                    } else {
                         outputUserInfo(userService.get(user.getName()), taskService.getAll());
                     }
                     break;
 
                 case "7":
                     task = inputTask();
-                    if ( ! taskService.delete(task.getName())){
+                    if (!taskService.delete(task.getName())) {
                         System.out.println("A task with the same name don't exists");
-                    }else {
+                    } else {
                         System.out.println("Task: " + task.getName() + " successfully deleted");
                     }
                     break;
 
                 case "8":
                     user = inputUser();
-                    if ( userService.get(user.getName()) == null){
+                    if (userService.get(user.getName()) == null) {
                         System.out.println("A user with the same name don't exists");
-                    }else {
+                    } else {
                         userService.delete(user.getName());
-                        System.out.println("\nUser: " + user.getName() + " successfully deleted");
+                        System.out.println("\nUser: " + user.getName() + " with his tasks, successfully deleted");
                     }
                     break;
 
@@ -147,101 +137,101 @@ public class ConsoleApp {
 
 
                 default:
-                error();
+                    error();
             }
         }
     }
 
-    public void error(){
-        System.out.println("Error, please enter another number");
+    public void error() {
+        System.out.println("Wrong number, please enter another number");
     }
 
-    public LocalDate inputData(){
+    public LocalDate inputData() {
         Scanner scanner = new Scanner(System.in);
         LocalDate date = LocalDate.now();
-        String yearS, monthS,dayOfMontshS;
+        String yearS, monthS, dayOfMontshS;
         System.out.println("Enter year of deadline");
         yearS = scanner.nextLine();
-        while (!errorCheckForNumber(yearS) || (Integer.parseInt(yearS) < date.getYear())){
-            System.out.println("Error,please enter another year");
+        while (!errorCheckForNumber(yearS) || (Integer.parseInt(yearS) < date.getYear())) {
+            System.out.println("Wrong string or past date, please enter another year");
             yearS = scanner.nextLine();
         }
         int year = Integer.parseInt(yearS);
         System.out.println("Enter month of deadline (1-12)");
         monthS = scanner.nextLine();
         while (!errorCheckForNumber(monthS) || ((year == date.getYear()) && (Integer.parseInt(monthS) < date.getMonthValue()))
-                || Integer.parseInt(monthS) < 1 || Integer.parseInt(monthS) > 12){
-            System.out.println("Error,please enter another month");
+                || Integer.parseInt(monthS) < 1 || Integer.parseInt(monthS) > 12) {
+            System.out.println("Wrong string or past date, please enter another month");
             monthS = scanner.nextLine();
         }
         int month = Integer.parseInt(monthS);
         System.out.println("Enter month of deadline (1-31)");
         dayOfMontshS = scanner.nextLine();
-        while(!errorCheckForNumber(dayOfMontshS) || (year == date.getYear() && month == date.getMonthValue() && Integer.parseInt(dayOfMontshS)
-                < date.getDayOfMonth()) || Integer.parseInt(dayOfMontshS) < 1 || Integer.parseInt(dayOfMontshS) > 31){
-            System.out.println("Error,please enter another day");
+        while (!errorCheckForNumber(dayOfMontshS) || (year == date.getYear() && month == date.getMonthValue() && Integer.parseInt(dayOfMontshS)
+                < date.getDayOfMonth()) || Integer.parseInt(dayOfMontshS) < 1 || Integer.parseInt(dayOfMontshS) > 31) {
+            System.out.println("Wrong string or past date, please enter another day");
             dayOfMontshS = scanner.nextLine();
         }
         int dayOfMonth = Integer.parseInt(dayOfMontshS);
-        date = LocalDate.of(year,month,dayOfMonth);
+        date = LocalDate.of(year, month, dayOfMonth);
         return date;
     }
 
-    public boolean errorCheckForNumber(String date){
-        if(date.chars().allMatch( Character::isDigit) && !date.isEmpty()){
+    public boolean errorCheckForNumber(String date) {
+        if (date.chars().allMatch(Character::isDigit) && !date.isEmpty()) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
-    public Task inputTask(){
+    public Task inputTask() {
         Scanner nameScanner = new Scanner(System.in);
         String taskName;
         System.out.println("Enter name of task: ");
         taskName = nameScanner.nextLine();
 
-        while (taskName.length() == 0){
+        while (taskName.length() == 0) {
             System.out.println("Empty string, please enter new task name:");
             taskName = nameScanner.nextLine();
         }
-        taskName = taskName.replace(","," ");
+        taskName = taskName.replace(",", " ");
         return new Task(taskName);
     }
 
-    public User inputUser(){
+    public User inputUser() {
         Scanner nameScanner = new Scanner(System.in);
         String userName;
 
         System.out.println("Enter name of User: ");
         userName = nameScanner.nextLine();
 
-        while (userName.length() == 0){
+        while (userName.length() == 0) {
             System.out.println("Empty string, please enter new user name:");
             userName = nameScanner.nextLine();
         }
-        userName = userName.replace(","," ");
+        userName = userName.replace(",", " ");
         return new User(userName);
     }
 
-    public void outputTaskInfo(Task task, Collection<User> users){
+    public void outputTaskInfo(Task task, Collection<User> users) {
         System.out.println("Task id: " + task.getId());
         System.out.println("Name of task: " + task.getName());
         System.out.println("Task deadline: " + task.getDeadline());
-        System.out.print("Task user: " );
-        for (User user : users){
-            if(user.getId() == task.getUserId()){
+        System.out.print("Task user: ");
+        for (User user : users) {
+            if (user.getId() == task.getUserId()) {
                 System.out.println(user.getName() + "\n");
                 break;
             }
         }
     }
 
-    public void outputUserInfo(User user, Collection<Task> tasks){
+    public void outputUserInfo(User user, Collection<Task> tasks) {
         System.out.println("User name: " + user.getName());
         System.out.println("User id: " + user.getId());
         System.out.print("User tasks: ");
-        for (Task task : tasks){
+        for (Task task : tasks) {
             if (user.getId() == task.getUserId()) {
                 System.out.print(task.getName() + "   ");
             }

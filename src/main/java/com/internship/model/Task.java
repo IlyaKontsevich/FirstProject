@@ -14,28 +14,31 @@ public class Task {
         this.name = name;
     }
 
-    public void setDeadline(LocalDate date){
+    public void setDeadline(LocalDate date) {
         this.deadline = date;
     }
-    public void setUserId(int id){
+
+    public void setUserId(int id) {
         userId = id;
     }
 
-    public int getUserId(){
+    public int getUserId() {
         return userId;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public LocalDate getDeadline(){
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public void setId(int id){
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -1,21 +1,23 @@
 package com.internship.dao;
 
 import com.internship.model.Task;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+@Repository
+@Profile("dbSystem")
 public class TaskDbDao implements IDao<Task> {
 
-    public TaskDbDao(){
+    public TaskDbDao() {
         try {
             Statement statement = getConnection().createStatement();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY, name varchar NOT NULL);");
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS tasks(Id SERIAL PRIMARY KEY, name VARCHAR NOT NULL, deadeLine DATE NOT NULL, userId INTEGER NOT NULL, FOREIGN KEY (userId) REFERENCES users (Id) ON DELETE CASCADE);");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS tasks(Id SERIAL PRIMARY KEY, name VARCHAR NOT NULL, deadLine DATE NOT NULL, userId INTEGER NOT NULL, FOREIGN KEY (userId) REFERENCES users (Id) ON DELETE CASCADE);");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -24,9 +26,9 @@ public class TaskDbDao implements IDao<Task> {
     public Task add(Task task) {
         try {
             PreparedStatement preparedStatement = getStatement("INSERT INTO  tasks (name, deadLine, userId) VALUES  (?,?,?)");
-            preparedStatement.setString(1, task.getName());
-            preparedStatement.setDate(2, Date.valueOf(task.getDeadline()));
-            preparedStatement.setInt(3, task.getUserId());
+            preparedStatement.setString(1, task.getName());//add info in Db
+            preparedStatement.setDate(2, Date.valueOf(task.getDeadline()));//add info in Db
+            preparedStatement.setInt(3, task.getUserId());//add info in DB
             int rez = preparedStatement.executeUpdate();
             closeConnection(getConnection());
             if (rez == 0) {
@@ -44,7 +46,7 @@ public class TaskDbDao implements IDao<Task> {
     public boolean delete(String name) {
         try {
             PreparedStatement preparedStatement = getStatement("DELETE FROM tasks WHERE name = ?");
-            preparedStatement.setString(1,name);
+            preparedStatement.setString(1, name);//delete tasks by name
             int rez = preparedStatement.executeUpdate();
             closeConnection(getConnection());
             if (rez == 0) {
@@ -60,8 +62,8 @@ public class TaskDbDao implements IDao<Task> {
 
     public Task get(String name) {
         try {
-            PreparedStatement preparedStatement =  getStatement("SELECT id, name, deadline, userId FROM tasks WHERE name = ?");
-            preparedStatement.setString(1,name);
+            PreparedStatement preparedStatement = getStatement("SELECT id, name, deadline, userId FROM tasks WHERE name = ?");
+            preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.next()) {
                 closeConnection(getConnection());
@@ -83,7 +85,7 @@ public class TaskDbDao implements IDao<Task> {
             ResultSet resultSet = getStatement("Select * from tasks").executeQuery();
             while (resultSet.next()) {
                 Task task = setTaskInfo(resultSet);
-                tasks.put(task.getName(),task);
+                tasks.put(task.getName(), task);
             }
             closeConnection(getConnection());
             return tasks.values();
@@ -102,7 +104,7 @@ public class TaskDbDao implements IDao<Task> {
         return null;
     }
 
-    private Task setTaskInfo(ResultSet resultSet){
+    private Task setTaskInfo(ResultSet resultSet) {
         try {
             String taskName = resultSet.getString("name");//read task name
             Task task = new Task(taskName);
@@ -110,9 +112,10 @@ public class TaskDbDao implements IDao<Task> {
             task.setId(resultSet.getInt("id"));
             task.setUserId(resultSet.getInt("userid"));
             return task;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }return null;
+        }
+        return null;
     }
 
     private PreparedStatement getStatement(String sql) {

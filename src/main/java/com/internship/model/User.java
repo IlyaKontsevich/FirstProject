@@ -7,19 +7,19 @@ public class User {
     private String name;
     private int id;
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
-    public void setId(int id){
+    public void setId(int id) {
         this.id = id;
     }
 
-    public User(String name){
+    public User(String name) {
         this.name = name;
     }
 

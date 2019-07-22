@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,18 +59,18 @@ public class UserDbDao implements IDao<User> {
     }
 
     public Collection<User> getAll() {
-        Map<String, User> users = new HashMap();
+        Collection<User> users = new ArrayList<User>();
         try {
             ResultSet resultSet = getStatement("Select * from users").executeQuery();
             while (resultSet.next()) {//while exists user
-                users.put(setUserInfo(resultSet).getName(), setUserInfo(resultSet));//add user in Map
+                users.add(setUserInfo(resultSet));//add user in Map
             }
             closeConnection(getConnection());
-            return users.values();//return collection of User
+            return users;//return collection of User
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return users.values();
+        return users;
     }
 
     private User setUserInfo(ResultSet resultSet) {

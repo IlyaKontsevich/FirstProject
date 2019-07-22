@@ -10,16 +10,18 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner symbolScanner = new Scanner(System.in);
-        System.out.println("Chose data storege type:\n1.File storage\n2.Data base storage");
+        System.out.println("Chose data storege type:\n1.File storage\n2.Data base storage\n");
         String symbol = symbolScanner.nextLine();
-        while(!symbol.equals("1") && !symbol.equals("2")) {
+        while (!symbol.equals("1") && !symbol.equals("2") && !symbol.equals("3")) {
             System.out.println("Wrong number,please enter another: ");
             symbol = symbolScanner.nextLine();
         }
-        if(symbol.equals("1")) {
+        if (symbol.equals("1")) {
             System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "fileSystem");
-        }else {
+        } else if (symbol.equals("2")) {
             System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "dbSystem");
+        } else {
+            System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "spring-JDBC");
         }
         ApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
         ConsoleApp application = context.getBean("consoleApp", ConsoleApp.class);
@@ -45,7 +47,9 @@ public class Main {
 
 
 
-/*<bean id="userDbDao" class="com.internship.dao.UserDbDao"> </bean>
+/*
+<context:component-scan base-package="com.internship"/>
+<bean id="userDbDao" class="com.internship.dao.UserDbDao"> </bean>
     <bean id="taskDbDao" class="com.internship.dao.TaskDbDao"> </bean>
     <bean id="userDbService" class="com.internship.service.UserService">
         <constructor-arg index = "0" ref="userDbDao"/>

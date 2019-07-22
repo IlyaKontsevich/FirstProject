@@ -5,9 +5,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 @Repository
 @Profile("dbSystem")
@@ -80,19 +79,19 @@ public class TaskDbDao implements IDao<Task> {
     }
 
     public Collection<Task> getAll() {
-        Map<String, Task> tasks = new HashMap();
+        Collection<Task> tasks = new ArrayList<Task>();
         try {
             ResultSet resultSet = getStatement("Select * from tasks").executeQuery();
             while (resultSet.next()) {
                 Task task = setTaskInfo(resultSet);
-                tasks.put(task.getName(), task);
+                tasks.add(task);
             }
             closeConnection(getConnection());
-            return tasks.values();
+            return tasks;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return tasks.values();
+        return tasks;
     }
 
     private Connection getConnection() {

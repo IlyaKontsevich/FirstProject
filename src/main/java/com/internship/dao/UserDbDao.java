@@ -2,14 +2,11 @@ package com.internship.dao;
 
 import com.internship.model.User;
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 @Repository
 @Profile("dbSystem")

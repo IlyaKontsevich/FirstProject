@@ -23,7 +23,7 @@ public class TaskStore implements IStore<Task> {
         }
     }
 
-    public void addInfo(Map<String, Task> tasks) {
+    public void addInfo(Map<Integer, Task> tasks) {
         try {
             Writer writer = new FileWriter("TaskStore.txt");
 
@@ -40,7 +40,7 @@ public class TaskStore implements IStore<Task> {
     }
 
     public int getMaxId() {
-        Map<String, Task> tasks = getInfo();
+        Map<Integer, Task> tasks = getInfo();
         int maxId = -1;
         for (Task task : tasks.values()) {
             if (task.getId() > maxId) {
@@ -51,8 +51,8 @@ public class TaskStore implements IStore<Task> {
         return maxId;
     }
 
-    public Map<String, Task> getInfo() {
-        Map<String, Task> tasks = new HashMap();
+    public Map<Integer, Task> getInfo() {
+        Map<Integer, Task> tasks = new HashMap();
         try {
             BufferedReader reader = new BufferedReader(new FileReader("TaskStore.txt"));
 
@@ -64,7 +64,7 @@ public class TaskStore implements IStore<Task> {
                 task.setDeadline(LocalDate.parse(string[2]));//set task dead line
                 task.setId(Integer.parseInt(string[0]));//get task Id
                 task.setUserId(Integer.parseInt(string[3]));//get task user name
-                tasks.put(task.getName(), task);//add task in Map
+                tasks.put(task.getId(), task);//add task in Map
             }
         } catch (IOException e) {
             e.printStackTrace();

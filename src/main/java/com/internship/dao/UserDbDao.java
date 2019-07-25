@@ -10,7 +10,7 @@ import java.util.Collection;
 
 @Repository
 @Profile("dbSystem")
-public class UserDbDao implements IDao<User> {
+public class UserDbDao implements IUserDao {
 
     public UserDbDao() {
         try {
@@ -19,6 +19,35 @@ public class UserDbDao implements IDao<User> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Collection<User> getPage(Integer position) {
+        Collection<User> users = new ArrayList<User>();
+        try {
+            ResultSet resultSet = getStatement("Select * from users LIMIT 3 OFFSET '"+position+"'").executeQuery();
+            while (resultSet.next()) {//while exists user
+                users.add(setUserInfo(resultSet));//add user in Map
+            }
+            closeConnection(getConnection());
+            return users;//return collection of User
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    @Override
+    public Integer getSize() {
+        try {
+            ResultSet rs = getStatement("select count(*) from users").executeQuery();
+            rs.next();
+            int count = rs.getInt(1);
+            return count;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public User add(User user) {
@@ -38,10 +67,10 @@ public class UserDbDao implements IDao<User> {
         return null;
     }
 
-    public boolean delete(String name) {
+    public boolean delete(Integer id) {
         try {
-            PreparedStatement preparedStatement = getStatement("DELETE FROM users WHERE name = ?");
-            preparedStatement.setString(1, name);//delete user by name
+            PreparedStatement preparedStatement = getStatement("DELETE FROM users WHERE id = ?");
+            preparedStatement.setInt(1, id);//delete user by name
             int rez = preparedStatement.executeUpdate();//if don't delete rez == 0
             closeConnection(getConnection());
             if (rez == 0) {
@@ -82,6 +111,25 @@ public class UserDbDao implements IDao<User> {
         return null;
     }
 
+    public User get(Integer id) {
+        try {
+            PreparedStatement preparedStatement = getStatement("SELECT id, name FROM users WHERE id = ?");
+            preparedStatement.setInt(1, id);//get user by name
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (!resultSet.next()) {
+                closeConnection(getConnection());
+                return null;
+            } else {
+                User user = setUserInfo(resultSet);
+                closeConnection(getConnection());
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public User get(String name) {
         try {
             PreparedStatement preparedStatement = getStatement("SELECT id, name FROM users WHERE name = ?");
@@ -100,7 +148,6 @@ public class UserDbDao implements IDao<User> {
         }
         return null;
     }
-
 
     private Connection getConnection() {
         try {

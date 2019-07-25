@@ -1,6 +1,6 @@
 package com.internship.dao;
 
-import com.internship.Mappers.UserMapper;
+import com.internship.mappers.UserMapper;
 import com.internship.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -11,7 +11,7 @@ import java.util.Collection;
 
 @Repository
 @Profile("spring-JDBC")
-public class UserSpringJdbcDao implements IDao<User>{
+public class UserSpringJdbcDao implements IUserDao{
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -26,15 +26,15 @@ public class UserSpringJdbcDao implements IDao<User>{
         if (rez == 0) {
             return null;
         } else {
-            return get(user.getName());
+            return jdbcTemplate.queryForObject("SELECT * FROM users WHERE name=?", new Object[]{user.getName()}, new UserMapper());
         }
     }
 
     @Override
-    public User get(String name) {
+    public User get(Integer id) {
         User user;
         try {
-        user = jdbcTemplate.queryForObject("SELECT * FROM users WHERE name=?", new Object[]{name}, new UserMapper());
+        user = jdbcTemplate.queryForObject("SELECT * FROM users WHERE id=?", new Object[]{id}, new UserMapper());
         } catch (DataAccessException e) {
             return null;
         }
@@ -47,9 +47,19 @@ public class UserSpringJdbcDao implements IDao<User>{
         return users;
     }
 
+    public Collection<User> getPage(Integer position){
+        Collection<User> tasks = jdbcTemplate.query("Select * from users LIMIT 3 OFFSET '"+position+"'", new UserMapper());
+        return tasks;
+    }
+
+    public Integer getSize() {
+        Integer count = jdbcTemplate.queryForObject("Select COUNT(*) from users", Integer.class);
+        return count;
+    }
+
     @Override
-    public boolean delete(String name) {
-        int rez = jdbcTemplate.update("DELETE FROM users WHERE name = ?",name);
+    public boolean delete(Integer id) {
+        int rez = jdbcTemplate.update("DELETE FROM users WHERE id = ?",id);
         if(rez == 0) {
             return false;
         }else{

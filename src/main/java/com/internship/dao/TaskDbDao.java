@@ -10,7 +10,7 @@ import java.util.Collection;
 
 @Repository
 @Profile("dbSystem")
-public class TaskDbDao implements IDao<Task> {
+public class TaskDbDao implements ITaskDao{
 
     public TaskDbDao() {
         try {
@@ -20,6 +20,35 @@ public class TaskDbDao implements IDao<Task> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Collection<Task> getPage(Integer position) {
+        Collection<Task> tasks = new ArrayList<Task>();
+        try {
+            ResultSet resultSet = getStatement("Select * from tasks LIMIT 3 OFFSET '"+position+"'").executeQuery();
+            while (resultSet.next()) {//while exists user
+                tasks.add(setTaskInfo(resultSet));//add user in Map
+            }
+            closeConnection(getConnection());
+            return tasks;//return collection of User
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tasks;
+    }
+
+    @Override
+    public Integer getSize() {
+        try {
+            ResultSet rs = getStatement("select count(*) from tasks").executeQuery();
+            rs.next();
+            int count = rs.getInt(1);
+            return count;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public Task add(Task task) {
@@ -33,7 +62,7 @@ public class TaskDbDao implements IDao<Task> {
             if (rez == 0) {
                 return null;
             } else {
-                return get(task.getName());
+                return get(task.getName(),task.getUserId());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -42,10 +71,10 @@ public class TaskDbDao implements IDao<Task> {
     }
 
 
-    public boolean delete(String name) {
+    public boolean delete(Integer id) {
         try {
-            PreparedStatement preparedStatement = getStatement("DELETE FROM tasks WHERE name = ?");
-            preparedStatement.setString(1, name);//delete tasks by name
+            PreparedStatement preparedStatement = getStatement("DELETE FROM tasks WHERE id = ?");
+            preparedStatement.setInt(1, id);//delete tasks by name
             int rez = preparedStatement.executeUpdate();
             closeConnection(getConnection());
             if (rez == 0) {
@@ -59,10 +88,29 @@ public class TaskDbDao implements IDao<Task> {
         return false;
     }
 
-    public Task get(String name) {
+    public Task get(String name, Integer userId) {
         try {
-            PreparedStatement preparedStatement = getStatement("SELECT id, name, deadline, userId FROM tasks WHERE name = ?");
+            PreparedStatement preparedStatement = getStatement("SELECT * FROM tasks WHERE name = ? AND userId = ?");
             preparedStatement.setString(1, name);
+            preparedStatement.setInt(2, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (!resultSet.next()) {
+                closeConnection(getConnection());
+                return null;
+            } else {
+                Task task = setTaskInfo(resultSet);
+                closeConnection(getConnection());
+                return task;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public Task get(Integer id) {
+        try {
+            PreparedStatement preparedStatement = getStatement("SELECT * FROM tasks WHERE id = ?");
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.next()) {
                 closeConnection(getConnection());

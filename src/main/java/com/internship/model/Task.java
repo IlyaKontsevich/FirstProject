@@ -4,9 +4,9 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Task {
-    private int id;
+    private Integer id;
     private String name;
-    private int userId;
+    private Integer userId;
     private LocalDate deadline;
 
 
@@ -58,5 +58,3 @@ public class Task {
         return Objects.hash(id, name, userId, deadline);
     }
 }
-
-//

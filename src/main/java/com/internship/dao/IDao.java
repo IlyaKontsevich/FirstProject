@@ -4,12 +4,16 @@ import java.util.Collection;
 
 public interface IDao<T> {
 
+    Collection<T> getPage(Integer position);
+
+    Integer getSize();
+
     T add(T type);
 
-    T get(String name);
+    T get(Integer id);
 
     Collection<T> getAll();
 
-    boolean delete(String name);
+    boolean delete(Integer id);
 }
 

@@ -13,26 +13,41 @@ public class UserService implements IService<User> {
     private IDao<User> dao;
 
     public User add(User user) {
-        if (get(user.getName()) != null) { //exist check
-            return null;
-        }
-        return dao.add(user);
+        for (User user1 : dao.getAll()) {
+            if (user1.getName().equals(user.getName())) {
+                return null;
+            }
+        }return dao.add(user);
     }
 
-    public boolean delete(String name) {
-        if (dao.get(name) == null) {
+    public Collection<User> getPage(Integer position){
+        return dao.getPage(position);
+    }
+
+    public boolean delete(Integer id) {
+        if (dao.get(id) == null) {
             return false;
         }
-        dao.delete(name);
+        dao.delete(id);
         return true;
     }
 
-    public User get(String name) {
-        return dao.get(name);
+    public User get(Integer id) {
+        return dao.get(id);
+    }
+
+    @Override
+    public Integer getSize() {
+        return dao.getSize();
     }
 
     public Collection<User> getAll() {
         return dao.getAll();
+    }
+
+    @Override
+    public Collection<User> getAllById(Integer id) {
+        return null;
     }
 
 }

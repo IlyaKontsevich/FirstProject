@@ -1,6 +1,6 @@
 package com.internship.dao;
 
-import com.internship.Mappers.TaskMapper;
+import com.internship.mappers.TaskMapper;
 import com.internship.model.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -12,7 +12,7 @@ import java.util.Collection;
 
 @Repository
 @Profile("spring-JDBC")
-public class TaskSpringJdbcDao implements IDao<Task> {
+public class TaskSpringJdbcDao implements ITaskDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -28,19 +28,29 @@ public class TaskSpringJdbcDao implements IDao<Task> {
         if (rez == 0) {
             return null;
         } else {
-            return get(task.getName());
+            return jdbcTemplate.queryForObject("SELECT * FROM tasks WHERE name = ? AND userid = ?", new Object[]{task.getName(),task.getUserId()}, new TaskMapper());
         }
     }
 
     @Override
-    public Task get(String name) {
+    public Task get(Integer id) {
         Task task;
         try {
-            task = jdbcTemplate.queryForObject("SELECT id, name, deadline, userId FROM tasks WHERE name = ?", new Object[]{name}, new TaskMapper());
+            task = jdbcTemplate.queryForObject("SELECT id, name, deadline, userId FROM tasks WHERE id = ?", new Object[]{id}, new TaskMapper());
         } catch (DataAccessException dataAccessException) {
             return null;
         }
         return task;
+    }
+
+    public Collection<Task> getPage(Integer position){
+        Collection<Task> tasks = jdbcTemplate.query("Select * from tasks LIMIT 3 OFFSET '"+position+"'", new TaskMapper());
+        return tasks;
+    }
+
+    public Integer getSize() {
+        Integer count = jdbcTemplate.queryForObject("Select COUNT (*) from tasks", Integer.class);
+        return count;
     }
 
     @Override
@@ -50,8 +60,8 @@ public class TaskSpringJdbcDao implements IDao<Task> {
     }
 
     @Override
-    public boolean delete(String name) {
-        int rez = jdbcTemplate.update("DELETE FROM tasks WHERE name = ?", name);
+    public boolean delete(Integer id) {
+        int rez = jdbcTemplate.update("DELETE FROM tasks WHERE id = ?", id);
         if (rez == 0) {
             return false;
         } else {

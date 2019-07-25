@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner symbolScanner = new Scanner(System.in);
-        System.out.println("Chose data storege type:\n1.File storage\n2.Data base(JDBC) storage\n3.Data base(spring-JDBC) storage");
+        System.out.println("Chose data storage type:\n1.File storage\n2.Data base(JDBC) storage\n3.Data base(spring-JDBC) storage");
         String symbol = symbolScanner.nextLine();
         while (!symbol.equals("1") && !symbol.equals("2") && !symbol.equals("3")) {
             System.out.println("Wrong number,please enter another: ");
@@ -29,6 +29,15 @@ public class Main {
         System.out.println("EXIT");
     }
 }
+//пагенация
+//2IDoa
+//2 metods for output
+//get,delete by id
+//@Deplecated
+//Integer
+//limit of set
+//всего user and task
+//delete task
 
 /*
 <context:component-scan base-package="com.internship"/>

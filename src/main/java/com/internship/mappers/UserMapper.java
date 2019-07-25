@@ -1,4 +1,4 @@
-package com.internship.Mappers;
+package com.internship.mappers;
 
 import com.internship.model.User;
 import org.springframework.jdbc.core.RowMapper;

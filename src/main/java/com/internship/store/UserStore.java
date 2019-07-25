@@ -23,7 +23,7 @@ public class UserStore implements IStore<User> {
         }
     }
 
-    public void addInfo(Map<String, User> users) {
+    public void addInfo(Map<Integer, User> users) {
         try {
             Writer writer = new FileWriter("UserStore.txt");
 
@@ -39,7 +39,7 @@ public class UserStore implements IStore<User> {
     }
 
     public int getMaxId() {
-        Map<String, User> users = getInfo();
+        Map<Integer, User> users = getInfo();
         int maxId = -1;
         for (User user : users.values()) {
             if (user.getId() > maxId) {
@@ -50,15 +50,15 @@ public class UserStore implements IStore<User> {
         return maxId;
     }
 
-    public Map<String, User> getInfo() {
-        Map<String, User> users = new HashMap();
+    public Map<Integer, User> getInfo() {
+        Map<Integer, User> users = new HashMap();
         try {
             BufferedReader reader = new BufferedReader(new FileReader("UserStore.txt"));
             while (reader.read() != -1) {
                 String[] string = reader.readLine().split(",");//get one string divided on ,
                 User user = new User(string[1]);//create new user
                 user.setId(Integer.parseInt(string[0]));
-                users.put(user.getName(), user);//add user in Map
+                users.put(user.getId(), user);//add user in Map
             }
         } catch (IOException e) {
             e.printStackTrace();

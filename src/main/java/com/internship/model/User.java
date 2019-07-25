@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class User {
     private String name;
-    private int id;
+    private Integer id;
 
     public String getName() {
         return name;

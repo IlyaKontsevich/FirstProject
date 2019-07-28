@@ -3,14 +3,12 @@ package com.internship.dao;
 import com.internship.mappers.UserMapper;
 import com.internship.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import java.util.Collection;
 
 @Repository
-@Profile("spring-JDBC")
 public class UserSpringJdbcDao implements IUserDao{
     private final JdbcTemplate jdbcTemplate;
 
@@ -22,13 +20,12 @@ public class UserSpringJdbcDao implements IUserDao{
 
     @Override
     public User add(User user) {
-        int rez = jdbcTemplate.update("INSERT INTO  users (name) VALUES  (?)",user.getName());
-        if (rez == 0) {
+        if(0 != jdbcTemplate.queryForObject("Select COUNT(*) from users WHERE name = ?",new Object[] {user.getName()}, Integer.class)) {
             return null;
-        } else {
-            return jdbcTemplate.queryForObject("SELECT * FROM users WHERE name=?", new Object[]{user.getName()}, new UserMapper());
         }
-    }
+        jdbcTemplate.update("INSERT INTO  users (name) VALUES  (?)",user.getName());
+        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE name=?", new Object[]{user.getName()}, new UserMapper());
+   }
 
     @Override
     public User get(Integer id) {
@@ -55,6 +52,12 @@ public class UserSpringJdbcDao implements IUserDao{
     public Integer getSize() {
         Integer count = jdbcTemplate.queryForObject("Select COUNT(*) from users", Integer.class);
         return count;
+    }
+
+    @Override
+    public Integer update(User user) {
+        String sql = "update users set name = ? where id = ? ";
+        return jdbcTemplate.update(sql,user.getName(),user.getId());
     }
 
     @Override

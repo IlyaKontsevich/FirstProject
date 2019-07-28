@@ -1,0 +1,65 @@
+For task:
+<task>
+    <id> 0 </id>
+    <name> someName </name>
+    <deadLine> 0 </deadLine>
+    <userId> 0 </userId>
+</task>
+
+CREATE:   POST /tasks HTTP/1.1
+          Host: server
+          Content-type: application/xml
+          <?xml version="1.0"?>
+           <task>
+              <name> someName </name>
+              <deadLine> 2019-12-12 </deadLine>
+              <userId> 0 </userId>
+          </task>
+
+READ:      GET /tasks/someName HTTP/1.1
+           Host: server
+           Accept: application/xml
+
+UPDATE:     PUT /tasks/someName HTTP/1.1
+            Host: server
+            Content-Type: application/xml
+            <?xml version="1.0"?>
+             <task>
+                <name> newName </name>
+                <deadLine> 2029-12-12 </deadLine>
+                <userId> 1 </userId>
+             </task>
+
+DELETE:     DELETE /tasks/newName HTTP/1.1
+            Host: server
+            Accept: application/xml
+
+--------------------------------------------------------------------------
+
+for user
+{
+    "id" = 0,
+    "name" = someName
+}
+
+CREATE:   POST /users HTTP/1.1
+          Host: server
+          Content-type: application/JSON
+          {
+              "name" = someName
+          }
+
+READ:      GET /users/someName HTTP/1.1
+           Host: server
+           Accept: application/JSON
+
+UPDATE:     PUT /users/someName HTTP/1.1
+            Host: server
+            Content-Type: application/JSON
+            {
+                "name" = newName
+            }
+
+DELETE:     DELETE /users/newName HTTP/1.1
+            Host: server
+            Accept: application/JSON

@@ -7,6 +7,7 @@ public class Task {
     private Integer id;
     private String name;
     private Integer userId;
+    private String date;
     private LocalDate deadline;
 
 
@@ -56,5 +57,14 @@ public class Task {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, userId, deadline);
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String setDate(String date) {
+        this.date= date;
+        return this.date;
     }
 }

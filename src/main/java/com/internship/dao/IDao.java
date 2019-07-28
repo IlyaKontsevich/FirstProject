@@ -3,10 +3,7 @@ package com.internship.dao;
 import java.util.Collection;
 
 public interface IDao<T> {
-
-    Collection<T> getPage(Integer position);
-
-    Integer getSize();
+    Integer update(T type);
 
     T add(T type);
 

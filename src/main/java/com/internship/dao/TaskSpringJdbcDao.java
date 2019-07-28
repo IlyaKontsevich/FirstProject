@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 
 @Repository
-@Profile("spring-JDBC")
 public class TaskSpringJdbcDao implements ITaskDao {
     private final JdbcTemplate jdbcTemplate;
 
@@ -24,12 +23,11 @@ public class TaskSpringJdbcDao implements ITaskDao {
 
     @Override
     public Task add(Task task) {
-        int rez = jdbcTemplate.update("INSERT INTO  tasks (name, deadLine, userId) VALUES  (?,?,?)", task.getName(), task.getDeadline(), task.getUserId());
-        if (rez == 0) {
+        if(0 != jdbcTemplate.queryForObject("Select COUNT(*) from tasks WHERE name = ? AND userid = ?",new Object[] {task.getName(),task.getUserId()}, Integer.class)) {
             return null;
-        } else {
-            return jdbcTemplate.queryForObject("SELECT * FROM tasks WHERE name = ? AND userid = ?", new Object[]{task.getName(),task.getUserId()}, new TaskMapper());
         }
+        jdbcTemplate.update("INSERT INTO  tasks (name, deadLine, userId) VALUES  (?,?,?)", task.getName(), task.getDeadline(), task.getUserId());
+        return jdbcTemplate.queryForObject("SELECT * FROM tasks WHERE name = ? AND userid = ?", new Object[]{task.getName(),task.getUserId()}, new TaskMapper());
     }
 
     @Override
@@ -43,14 +41,19 @@ public class TaskSpringJdbcDao implements ITaskDao {
         return task;
     }
 
-    public Collection<Task> getPage(Integer position){
-        Collection<Task> tasks = jdbcTemplate.query("Select * from tasks LIMIT 3 OFFSET '"+position+"'", new TaskMapper());
+    public Collection<Task> getPage(Integer position, Integer userId){
+        Collection<Task> tasks = jdbcTemplate.query("Select * from tasks where userid = '"+userId+"' LIMIT 3 OFFSET '"+position+"'", new TaskMapper());
         return tasks;
     }
-
-    public Integer getSize() {
-        Integer count = jdbcTemplate.queryForObject("Select COUNT (*) from tasks", Integer.class);
+    public Integer getSize(Integer userId) {
+        Integer count = jdbcTemplate.queryForObject("Select COUNT (*) from tasks where userid = '"+userId+"'", Integer.class);
         return count;
+    }
+
+    @Override
+    public Integer update(Task task) {
+        String sql = "update tasks set name = ?,deadline = ? where id = ? ";
+        return jdbcTemplate.update(sql,task.getName(),task.getDeadline(),task.getId());
     }
 
     @Override

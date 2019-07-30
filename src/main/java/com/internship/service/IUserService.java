@@ -5,6 +5,6 @@ import com.internship.model.User;
 import java.util.Collection;
 
 public interface IUserService extends IService<User>{
-    Collection<User> getPage(Integer position);
+    Collection<User> getPage(Integer position,Integer pageSize,String sortType);
     Integer getSize();
 }

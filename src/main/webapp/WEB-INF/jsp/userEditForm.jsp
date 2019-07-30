@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <h1>Edit Users</h1>
-<form:form method="POST" action="/FirstProject/userEditSave">
+<form:form method="POST" action="editsave">
     <table >
         <tr>
             <td></td>

@@ -11,8 +11,8 @@ public class TaskService implements ITaskService{
     private ITaskDao dao;
 
     @Override
-    public Collection<Task> getPage(Integer position, Integer userId) {
-        return dao.getPage(position,userId);
+    public Collection<Task> getPage(Integer position,Integer pageSize,Integer userId, String sortType) {
+        return dao.getPage(position,pageSize,userId,sortType);
     }
 
     @Override

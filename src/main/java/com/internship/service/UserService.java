@@ -20,8 +20,8 @@ public class UserService implements IUserService{
         return dao.add(user);
     }
 
-    public Collection<User> getPage(Integer position){
-        return dao.getPage(position);
+    public Collection<User> getPage(Integer position,Integer pageSize,String sortType){
+        return dao.getPage(position,pageSize,sortType);
     }
 
     public void delete(Integer id) {

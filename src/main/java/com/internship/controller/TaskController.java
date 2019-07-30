@@ -14,31 +14,58 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 @Controller
+@RequestMapping("user/{userId}/task")
 public class TaskController {
     @Autowired
     private ITaskDao taskDao;
+    private Integer pageSize = 3;
+    private String sortType = "id";
 
-    @RequestMapping("viewUser{userId}/taskForm")
-    public String showForm(@PathVariable Integer userId,Model m) {
+    @RequestMapping("/form")
+    public String showForm(Model m) {
         m.addAttribute("command", new Task("taskname"));
         return "taskForm";
     }
 
-    @RequestMapping(value="/viewUser{userId}/taskSave",method = RequestMethod.POST)
+    @RequestMapping(value="/save",method = RequestMethod.POST)
     public String save(@PathVariable Integer userId,@ModelAttribute("task") Task task){
         task.setUserId(userId);
         LocalDate localDate = LocalDate.parse(task.getDate());
-        task.setDeadline(localDate);
-
-        if(taskDao.add(task) != null)
-            return "redirect:/viewUser{userId}/task0";
-        else
-            return "redirect:/error";
+        LocalDate todayDate = LocalDate.now();
+        if(localDate.isBefore(todayDate))
+        {
+            return "redirect:/user/error";
+        }else {
+            task.setDeadline(localDate);
+            if (taskDao.add(task) != null)
+                return "redirect:0";
+            else
+                return "redirect:/user/error";
+        }
     }
 
-    @RequestMapping("viewUser{userId}/task{position}")
+    @RequestMapping("/pagesize")
+    public String changePageSize(){
+        return "pageSize";
+    }
+
+    @RequestMapping("/savepage")
+    public String savePageSize(Integer pageSize){
+        this.pageSize = pageSize;
+        return "redirect:0";
+    }
+    @RequestMapping("/changesort{sorttype}")
+    public String changeSortType(@PathVariable String sorttype){
+        sorttype = sorttype.replace("{", "");
+        sorttype = sorttype.replace("}", "");
+        this.sortType = sorttype;
+        System.out.println(sorttype);
+        return "redirect:0";
+    }
+    @RequestMapping("/{position}")
     public String view(@PathVariable Integer userId,@PathVariable Integer position,Model m){
-        Collection<Task> list = taskDao.getPage(position,userId);
+        Collection<Task> list = taskDao.getPage(position,pageSize,userId,sortType);
+        m.addAttribute("pageSize",pageSize);
         m.addAttribute("size",taskDao.getSize(userId));
         m.addAttribute("position",position);
         m.addAttribute("userId",userId);
@@ -46,25 +73,25 @@ public class TaskController {
         return "task";
     }
 
-    @RequestMapping(value="viewUser{userId}/taskEditSave",method = RequestMethod.POST)
-    public String editSave(@PathVariable Integer userId,@ModelAttribute("task") Task task){
+    @RequestMapping(value="{id}/editsave",method = RequestMethod.POST)
+    public String editSave(@ModelAttribute("task") Task task){
         LocalDate localDate = LocalDate.parse(task.getDate());
         task.setDeadline(localDate);
         taskDao.update(task);
-        return "redirect:/viewUser{userId}/task0";
+        return "redirect:../0";
     }
 
-    @RequestMapping(value="/viewUser{userId}/editTask{id}")
+    @RequestMapping(value="{id}/edit")
     public String edit(@PathVariable Integer userId,@PathVariable Integer id, Model m){
         Task task = taskDao.get(id);
         m.addAttribute("command",task);
         m.addAttribute("userId",userId);
         return "taskEditForm";
     }
-    @RequestMapping(value="viewUser{userId}/deleteTask{id}",method = RequestMethod.GET)
-    public String delete(@PathVariable int id,@PathVariable int userId){
+    @RequestMapping(value="{id}/delete",method = RequestMethod.GET)
+    public String delete(@PathVariable int id){
         taskDao.delete(id);
-        return "redirect:/viewUser{userId}/task0";
+        return "redirect: ../0";
     }
 }
 

@@ -1,7 +1,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <h1>Edit Tasks</h1>
-<form:form method="post" action="taskEditSave">
+<form:form method="post" action="editsave">
     <table >
         <tr>
             <td></td>

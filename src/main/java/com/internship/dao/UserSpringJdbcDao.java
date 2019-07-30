@@ -43,12 +43,13 @@ public class UserSpringJdbcDao implements IUserDao{
         Collection<User> users = jdbcTemplate.query("Select * from users", new UserMapper());
         return users;
     }
+    @Override
+    public Collection<User> getPage(Integer position, Integer pageSize, String sortType){
+        Collection<User> tasks = jdbcTemplate.query("Select * from users ORDER BY "+sortType+" LIMIT '"+pageSize+"' OFFSET '"+position+"'", new UserMapper());
 
-    public Collection<User> getPage(Integer position){
-        Collection<User> tasks = jdbcTemplate.query("Select * from users LIMIT 3 OFFSET '"+position+"'", new UserMapper());
         return tasks;
     }
-
+    @Override
     public Integer getSize() {
         Integer count = jdbcTemplate.queryForObject("Select COUNT(*) from users", Integer.class);
         return count;

@@ -3,7 +3,6 @@ package com.internship.dao;
 import com.internship.mappers.TaskMapper;
 import com.internship.model.Task;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -40,11 +39,12 @@ public class TaskSpringJdbcDao implements ITaskDao {
         }
         return task;
     }
-
-    public Collection<Task> getPage(Integer position, Integer userId){
-        Collection<Task> tasks = jdbcTemplate.query("Select * from tasks where userid = '"+userId+"' LIMIT 3 OFFSET '"+position+"'", new TaskMapper());
+    @Override
+    public Collection<Task> getPage(Integer position,Integer pageSize, Integer userId,String sortType){
+        Collection<Task> tasks = jdbcTemplate.query("Select * from tasks where userid = '"+userId+"' ORDER BY "+sortType+" LIMIT '"+pageSize+"' OFFSET '"+position+"'", new TaskMapper());
         return tasks;
     }
+    @Override
     public Integer getSize(Integer userId) {
         Integer count = jdbcTemplate.queryForObject("Select COUNT (*) from tasks where userid = '"+userId+"'", Integer.class);
         return count;

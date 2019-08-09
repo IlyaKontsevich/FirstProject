@@ -1,97 +1,89 @@
 package com.internship.controller;
 
-import com.internship.dao.ITaskDao;
 import com.internship.model.Task;
+import com.internship.service.ITaskService;
+import com.internship.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
-@RequestMapping("user/{userId}/task")
+@RequestMapping("user/{userUrl}/{userId}/task")
 public class TaskController {
     @Autowired
-    private ITaskDao taskDao;
-    private Integer pageSize = 3;
-    private String sortType = "id";
+    private ITaskService service;
+    @Autowired
+    private IUserService userService;
 
-    @RequestMapping("/form")
+    @RequestMapping("{param}/form")
     public String showForm(Model m) {
         m.addAttribute("command", new Task("taskname"));
         return "taskForm";
     }
 
-    @RequestMapping(value="/save",method = RequestMethod.POST)
-    public String save(@PathVariable Integer userId,@ModelAttribute("task") Task task){
-        task.setUserId(userId);
-        LocalDate localDate = LocalDate.parse(task.getDate());
+    @RequestMapping(value="{param}/save",method = RequestMethod.POST)
+    public String save(String date,@PathVariable Integer userId,@ModelAttribute("task") Task task){
+        task.setUser(userService.get(userId));
+        LocalDate localDate = LocalDate.parse(date);
         LocalDate todayDate = LocalDate.now();
-        if(localDate.isBefore(todayDate))
-        {
-            return "redirect:/user/error";
+        if(localDate.isBefore(todayDate)) {
+            return "redirect:/user/{userUrl}/error";
         }else {
+            task.setTimeadd(todayDate);
             task.setDeadline(localDate);
-            if (taskDao.add(task) != null)
-                return "redirect:0";
+            task.setIsdone(false);
+            if (service.add(task) != null)
+                return "redirect:../?{param}";
             else
-                return "redirect:/user/error";
+                return "redirect:/user/{userUrl}/error";
         }
     }
 
-    @RequestMapping("/pagesize")
-    public String changePageSize(){
-        return "pageSize";
-    }
 
-    @RequestMapping("/savepage")
-    public String savePageSize(Integer pageSize){
-        this.pageSize = pageSize;
-        return "redirect:0";
-    }
-    @RequestMapping("/changesort{sorttype}")
-    public String changeSortType(@PathVariable String sorttype){
-        sorttype = sorttype.replace("{", "");
-        sorttype = sorttype.replace("}", "");
-        this.sortType = sorttype;
-        System.out.println(sorttype);
-        return "redirect:0";
-    }
-    @RequestMapping("/{position}")
-    public String view(@PathVariable Integer userId,@PathVariable Integer position,Model m){
-        Collection<Task> list = taskDao.getPage(position,pageSize,userId,sortType);
-        m.addAttribute("pageSize",pageSize);
-        m.addAttribute("size",taskDao.getSize(userId));
-        m.addAttribute("position",position);
-        m.addAttribute("userId",userId);
+    @RequestMapping("/")
+    public String view(@PathVariable String userUrl,@PathVariable Integer userId,
+                       @RequestParam(value="page", defaultValue = "1") String page,
+                       @RequestParam(value="size", defaultValue = "3") String size,
+                       @RequestParam(value="sort",defaultValue = "name:asc") List<String> sort,
+                       @RequestParam(value="filter",defaultValue = "") List<String> filter, Model m){
+        Collection<Task> list = service.getPage(Integer.parseInt(page),Integer.parseInt(size),userId,sort,filter);
+        m.addAttribute("userUrl",userUrl);
+        m.addAttribute("url","?page="+page+"&size="+size+"&sort="+String.join("&sort=",sort)+"&filter="+String.join("&filter=",filter));
+        m.addAttribute("filter",String.join(", and by ",filter).replace(":"," value:"));
+        m.addAttribute("sort",String.join(", and by ",sort).replace(":"," order:"));
+        m.addAttribute("pageSize",Integer.parseInt(size));
+        m.addAttribute("size",service.getSize(userId));
+        m.addAttribute("position",page);
         m.addAttribute("list",list);
         return "task";
     }
 
-    @RequestMapping(value="{id}/editsave",method = RequestMethod.POST)
-    public String editSave(@ModelAttribute("task") Task task){
-        LocalDate localDate = LocalDate.parse(task.getDate());
-        task.setDeadline(localDate);
-        taskDao.update(task);
-        return "redirect:../0";
+    @RequestMapping(value="{param}/{id}",method = RequestMethod.PUT)
+    public String editSave(String time,String done,String date,@PathVariable Integer userId,@ModelAttribute("task") Task task){
+        task.setUser(userService.get(userId));
+        task.setTimeadd(LocalDate.parse(time));
+        task.setDeadline(LocalDate.parse(date));
+        task.setIsdone(Boolean.parseBoolean(done));
+        service.update(task);
+        return "redirect: ../../?{param}";
     }
 
-    @RequestMapping(value="{id}/edit")
+    @RequestMapping(value="{param}/{id}/edit")
     public String edit(@PathVariable Integer userId,@PathVariable Integer id, Model m){
-        Task task = taskDao.get(id);
+        Task task = service.get(id);
         m.addAttribute("command",task);
-        m.addAttribute("userId",userId);
+        m.addAttribute("date",task.getTimeadd());
         return "taskEditForm";
     }
-    @RequestMapping(value="{id}/delete",method = RequestMethod.GET)
+    @RequestMapping(value="{param}/{id}",method = RequestMethod.DELETE)
     public String delete(@PathVariable int id){
-        taskDao.delete(id);
-        return "redirect: ../0";
+        service.delete(id);
+        return "redirect: ../?{param}";
     }
 }
 

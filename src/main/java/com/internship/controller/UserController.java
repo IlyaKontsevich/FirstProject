@@ -1,86 +1,84 @@
 package com.internship.controller;
 
-import com.internship.model.User;
+import com.internship.model.User;;
 import com.internship.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    private Integer pageSize = 3;
-    private String sortType = "id";
     @Autowired
     private IUserService service;
-
-    @RequestMapping("/form")
+    @RequestMapping("{url}/form")
     public String showForm(Model m){
         m.addAttribute("command", new User("username"));
         return "userForm";
     }
 
-    @RequestMapping(value="/save",method = RequestMethod.POST)
+    @RequestMapping("/go")
+    public String go(){
+        return "ajax";
+    }
+
+    @RequestMapping("/ajax")
+    @ResponseBody
+    public String ajax(){
+        return service.get(25).getName();
+    }
+
+    @RequestMapping(value="{url}/save",method = RequestMethod.POST)
     public String save(@ModelAttribute("user") User user){
         if(service.add(user) != null)
-            return "redirect:0";
+            return "redirect:../?{url}";
         else
             return "redirect:error";
     }
 
-    @RequestMapping("/error")
-    public String error(){
+    @RequestMapping("{url}/error")
+    public String error(@PathVariable String url,Model m){
+        m.addAttribute("url",url);
         return "error";
     }
-    @RequestMapping("/pagesize")
-    public String changePageSize(){
-        return "pageSize";
-    }
-    @RequestMapping("/savepage")
-    public String savePageSize(Integer pageSize){
-        this.pageSize = pageSize;
-        return "redirect:0";
-    }
-    @RequestMapping("/changesort{sorttype}")
-    public String changeSortType(@PathVariable String sorttype){
-        sorttype = sorttype.replace("{", "");
-        sorttype = sorttype.replace("}", "");
-        this.sortType = sorttype;
-        return "redirect:0";
-    }
-    @RequestMapping("/{position}")
-    public String view(@PathVariable Integer position,Model m){
-        Collection<User> list = service.getPage(position,pageSize,sortType);
-        m.addAttribute("pageSize",pageSize);
+
+    @RequestMapping(value = "/")
+    public String view(@RequestParam(value="page", defaultValue = "1") String page,
+                       @RequestParam(value="size", defaultValue = "3") String size,
+                       @RequestParam(value="sort",defaultValue = "name:asc") List<String> sort,
+                       @RequestParam(value="filter",defaultValue = "age:1") List<String> filter, Model m){
+        Collection<User> list = service.getPage(Integer.parseInt(page),Integer.parseInt(size),sort,filter);
+        m.addAttribute("url","?page="+page+"&size="+size+"&sort="+String.join("&sort=",sort)+"&filter="+String.join("&filter=",filter));
+        m.addAttribute("filter",String.join(", and by ",filter).replace(":"," value:"));
+        m.addAttribute("sort",String.join(", and by ",sort).replace(":"," order:"));
+        m.addAttribute("pageSize",Integer.parseInt(size));
         m.addAttribute("size",service.getSize());
-        m.addAttribute("position",position);
+        m.addAttribute("position",page);
         m.addAttribute("list",list);
         return "viewUser";
     }
 
 
-    @RequestMapping(value="{id}/editsave",method = RequestMethod.POST)
-    public String editSave(@ModelAttribute("user") User user){
+    @RequestMapping(value="{url}/{id}",method = RequestMethod.PUT)
+    public String editSave(@PathVariable String url,@ModelAttribute("user") User user){
         service.update(user);
-        return "redirect:/user/0";
+        return "redirect:/user/?{url}";
     }
 
-    @RequestMapping(value="{id}/edit")
-    public String edit(@PathVariable int id, Model m){
+    @RequestMapping(value="{url}/{id}/edit")
+    public String edit(@PathVariable String url,@PathVariable int id, Model m){
         User user = service.get(id);
         m.addAttribute("command",user);
         return "userEditForm";
     }
 
-    @RequestMapping(value="{id}/delete",method = RequestMethod.GET)
-    public String delete(@PathVariable int id){
+    @RequestMapping(value="{url}/{id}",method = RequestMethod.DELETE)
+    public String delete(@PathVariable String url,@PathVariable int id){
         service.delete(id);
-        return "redirect:/user/0";
+        return "redirect:/user/?{url}";
     }
 }

@@ -1,30 +1,77 @@
 package com.internship.model;
 
+import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Objects;
 
+@Entity
+@Table(name="tasks")
 public class Task {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name="name")
     private String name;
-    private Integer userId;
-    private String date;
+    @Column(name="deadline")
     private LocalDate deadline;
+    @Column(name="timeAdd")
+    private LocalDate timeadd;
+    @Column(name="priority")
+    private String priority;
+    @Column(name="isdone")
+    private Boolean isdone;
+    @ManyToOne
+    @JoinColumn(name = "userid", nullable = false)
+    private User user;
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Task() {
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Boolean getIsdone() {
+        return isdone;
+    }
+
+    public void setIsdone(Boolean done) {
+        isdone = done;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public LocalDate getTimeadd() {
+        return timeadd;
+    }
+
+    public void setTimeadd(LocalDate timeadd) {
+        this.timeadd = timeadd;
+    }
 
     public Task(String name) {
         this.name = name;
     }
 
-    public void setDeadline(LocalDate date) {
-        this.deadline = date;
-    }
-
-    public void setUserId(int id) {
-        userId = id;
-    }
-
-    public int getUserId() {
-        return userId;
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
     }
 
     public String getName() {
@@ -41,30 +88,5 @@ public class Task {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return id == task.id &&
-                userId == task.userId &&
-                Objects.equals(name, task.name) &&
-                Objects.equals(deadline, task.deadline);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, userId, deadline);
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String setDate(String date) {
-        this.date= date;
-        return this.date;
     }
 }

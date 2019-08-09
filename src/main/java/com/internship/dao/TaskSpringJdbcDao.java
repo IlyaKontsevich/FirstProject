@@ -1,4 +1,4 @@
-package com.internship.dao;
+/*package com.internship.dao;
 
 import com.internship.mappers.TaskMapper;
 import com.internship.model.Task;
@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
 
 @Repository
 public class TaskSpringJdbcDao implements ITaskDao {
@@ -25,7 +26,8 @@ public class TaskSpringJdbcDao implements ITaskDao {
         if(0 != jdbcTemplate.queryForObject("Select COUNT(*) from tasks WHERE name = ? AND userid = ?",new Object[] {task.getName(),task.getUserId()}, Integer.class)) {
             return null;
         }
-        jdbcTemplate.update("INSERT INTO  tasks (name, deadLine, userId) VALUES  (?,?,?)", task.getName(), task.getDeadline(), task.getUserId());
+        jdbcTemplate.update("INSERT INTO  tasks (name, deadLine, userId,timeadd,priority,isdone) VALUES  (?,?,?,?,?,?)",
+                task.getName(), task.getDeadline(), task.getUserId(),task.getTimeadd(),task.getPriority(),task.getIsdone());
         return jdbcTemplate.queryForObject("SELECT * FROM tasks WHERE name = ? AND userid = ?", new Object[]{task.getName(),task.getUserId()}, new TaskMapper());
     }
 
@@ -33,15 +35,16 @@ public class TaskSpringJdbcDao implements ITaskDao {
     public Task get(Integer id) {
         Task task;
         try {
-            task = jdbcTemplate.queryForObject("SELECT id, name, deadline, userId FROM tasks WHERE id = ?", new Object[]{id}, new TaskMapper());
+            task = jdbcTemplate.queryForObject("SELECT * FROM tasks WHERE id = ?", new Object[]{id}, new TaskMapper());
         } catch (DataAccessException dataAccessException) {
             return null;
         }
         return task;
     }
     @Override
-    public Collection<Task> getPage(Integer position,Integer pageSize, Integer userId,String sortType){
-        Collection<Task> tasks = jdbcTemplate.query("Select * from tasks where userid = '"+userId+"' ORDER BY "+sortType+" LIMIT '"+pageSize+"' OFFSET '"+position+"'", new TaskMapper());
+    public Collection<Task> getPage(Integer position, Integer userId, Integer pageSize, List<String> sortType, List<String> filter){
+        Collection<Task> tasks = jdbcTemplate.query("Select * from tasks WHERE userid ="+userId+filter+ sortType+
+                " LIMIT '"+pageSize+"' OFFSET '"+position+"'", new TaskMapper());
         return tasks;
     }
     @Override
@@ -51,13 +54,13 @@ public class TaskSpringJdbcDao implements ITaskDao {
     }
 
     @Override
-    public Integer update(Task task) {
-        String sql = "update tasks set name = ?,deadline = ? where id = ? ";
-        return jdbcTemplate.update(sql,task.getName(),task.getDeadline(),task.getId());
+    public void update(Task task) {
+        String sql = "update tasks set name = ?,deadline = ?,priority = ?,isdone = ? where id = ? ";
+        jdbcTemplate.update(sql,task.getName(),task.getDeadline(),task.getPriority(),task.getIsdone(),task.getId());
     }
 
     @Override
-    public Collection<Task> getAll() {
+    public Collection<Task> getAll(Integer userId) {
         Collection<Task> tasks = jdbcTemplate.query("Select * from tasks", new TaskMapper());
         return tasks;
     }
@@ -72,3 +75,4 @@ public class TaskSpringJdbcDao implements ITaskDao {
         }
     }
 }
+*/

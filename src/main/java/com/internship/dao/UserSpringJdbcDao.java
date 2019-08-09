@@ -1,4 +1,4 @@
-package com.internship.dao;
+/*package com.internship.dao;
 
 import com.internship.mappers.UserMapper;
 import com.internship.model.User;
@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import java.util.Collection;
+import java.util.List;
 
 @Repository
 public class UserSpringJdbcDao implements IUserDao{
@@ -20,11 +21,11 @@ public class UserSpringJdbcDao implements IUserDao{
 
     @Override
     public User add(User user) {
-        if(0 != jdbcTemplate.queryForObject("Select COUNT(*) from users WHERE name = ?",new Object[] {user.getName()}, Integer.class)) {
+        if(0 != jdbcTemplate.queryForObject("Select COUNT(*) from users WHERE email = ?",new Object[] {user.getEmail()}, Integer.class)) {
             return null;
         }
-        jdbcTemplate.update("INSERT INTO  users (name) VALUES  (?)",user.getName());
-        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE name=?", new Object[]{user.getName()}, new UserMapper());
+        jdbcTemplate.update("INSERT INTO  users (name,age,email) VALUES  (?,?,?)",user.getName(),user.getAge(),user.getEmail());
+        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", new Object[]{user.getEmail()}, new UserMapper());
    }
 
     @Override
@@ -44,10 +45,10 @@ public class UserSpringJdbcDao implements IUserDao{
         return users;
     }
     @Override
-    public Collection<User> getPage(Integer position, Integer pageSize, String sortType){
-        Collection<User> tasks = jdbcTemplate.query("Select * from users ORDER BY "+sortType+" LIMIT '"+pageSize+"' OFFSET '"+position+"'", new UserMapper());
-
-        return tasks;
+    public Collection<User> getPage(Integer position, Integer pageSize, List<String> sortType,List<String> filter){
+        Collection<User> users = jdbcTemplate.query("Select * from users "+filter+sortType+
+                " LIMIT '"+pageSize+"' OFFSET '"+position+"'", new UserMapper());
+        return users;
     }
     @Override
     public Integer getSize() {
@@ -56,9 +57,9 @@ public class UserSpringJdbcDao implements IUserDao{
     }
 
     @Override
-    public Integer update(User user) {
-        String sql = "update users set name = ? where id = ? ";
-        return jdbcTemplate.update(sql,user.getName(),user.getId());
+    public void update(User user) {
+        String sql = "update users set name = ?, age = ?, email = ? where id = ? ";
+        jdbcTemplate.update(sql,user.getName(),user.getAge(),user.getEmail(),user.getId());
     }
 
     @Override
@@ -71,3 +72,4 @@ public class UserSpringJdbcDao implements IUserDao{
         }
     }
 }
+*/

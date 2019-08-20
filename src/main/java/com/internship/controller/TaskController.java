@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -50,10 +51,16 @@ public class TaskController {
                        @RequestParam(value="page", defaultValue = "1") String page,
                        @RequestParam(value="size", defaultValue = "3") String size,
                        @RequestParam(value="sort",defaultValue = "name:asc") List<String> sort,
-                       @RequestParam(value="filter",defaultValue = "") List<String> filter, Model m){
+                       @RequestParam(required = false, value="filter") List<String> filter, Model m){
+        if(filter == null) {
+            filter = new ArrayList<String>();
+            filter.add("");
+            m.addAttribute("url","?page="+page+"&size="+size+"&sort="+String.join("&sort=",sort));
+        }else {
+            m.addAttribute("url","?page="+page+"&size="+size+"&sort="+String.join("&sort=",sort)+"&filter="+String.join("&filter=",filter));
+        }
         Collection<Task> list = service.getPage(Integer.parseInt(page),Integer.parseInt(size),userId,sort,filter);
         m.addAttribute("userUrl",userUrl);
-        m.addAttribute("url","?page="+page+"&size="+size+"&sort="+String.join("&sort=",sort)+"&filter="+String.join("&filter=",filter));
         m.addAttribute("filter",String.join(", and by ",filter).replace(":"," value:"));
         m.addAttribute("sort",String.join(", and by ",sort).replace(":"," order:"));
         m.addAttribute("pageSize",Integer.parseInt(size));

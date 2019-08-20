@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 @Controller
 public class FilterSortPage {
@@ -13,7 +14,11 @@ public class FilterSortPage {
     public String saveFilter(@PathVariable String type,String filtervalue,@RequestParam(value="page", defaultValue = "1") String page,
                              @RequestParam(value="size", defaultValue = "3") String size,
                              @RequestParam(value="sort",defaultValue = "name:asc") List<String> sort,
-                             @RequestParam(value="filter",defaultValue = "") List<String> filter){
+                             @RequestParam(required = false, value="filter") List<String> filter){
+        if(filter == null) {
+            filter = new ArrayList<String>();
+            filter.add("");
+        }
         type = type.replace("{", "");
         type =type.replace("}", "");
         if(type.equals("nul")){
@@ -33,7 +38,9 @@ public class FilterSortPage {
     public String changePage(@PathVariable String pages,@RequestParam(value="page", defaultValue = "1") String page,
                              @RequestParam(value="size", defaultValue = "3") String size,
                              @RequestParam(value="sort",defaultValue = "name:asc") List<String> sort,
-                             @RequestParam(value="filter",defaultValue = "") List<String> filter){
+                             @RequestParam(required = false, value="filter") List<String> filter){
+        if(filter == null)
+            return "redirect:./?page="+pages+"&size="+size+"&sort="+String.join("&sort=",sort);
         return "redirect:./?page="+pages+"&size="+size+"&sort="+String.join("&sort=",sort)+"&filter="+String.join("&filter=",filter);
     }
 
@@ -42,9 +49,12 @@ public class FilterSortPage {
                                  @RequestParam(value="page", defaultValue = "1") String page,
                                  @RequestParam(value="size", defaultValue = "3") String size,
                                  @RequestParam(value="sort",defaultValue = "name:asc") List<String> sort,
-                                 @RequestParam(value="filter",defaultValue = "") List<String> filter){
+                                 @RequestParam(required = false, value="filter") List<String> filter){
         pageSize = pageSize.replace("{", "");
         pageSize = pageSize.replace("}", "");
+        System.out.println(filter);
+        if(filter == null)
+            return "redirect:./?page=1&size="+pageSize+"&sort="+String.join("&sort=",sort);
         return "redirect:./?page=1&size="+pageSize+"&sort="+String.join("&sort=",sort)+"&filter="+String.join("&filter=",filter);
     }
 
@@ -63,7 +73,7 @@ public class FilterSortPage {
     public String changeSortType(@RequestParam(value="page", defaultValue = "1") String page,
                                  @RequestParam(value="size", defaultValue = "3") String size,
                                  @RequestParam(value="sort",defaultValue = "name:asc") List<String> sort,
-                                 @RequestParam(value="filter",defaultValue = "") List<String> filter,
+                                 @RequestParam(required = false, value="filter") List<String> filter,
                                  @PathVariable String sorttype){
         sorttype = sorttype.replace("{", "");
         sorttype = sorttype.replace("}", "");
@@ -74,6 +84,8 @@ public class FilterSortPage {
             }if(!sort.isEmpty()){
                 size = size+"&sort=";
             }
+            if(filter == null)
+                return "redirect:./?page="+page+"&size="+size+String.join("&sort=",sort);
             return "redirect:./?page="+page+"&size="+size+String.join("&sort=",sort)+"&filter="+String.join("&filter=",filter);
         }if(contains(sort,sorttype)==-1){
             sort.add(sorttype.replace(",",":"));
@@ -82,7 +94,8 @@ public class FilterSortPage {
             sort.add(sorttype.replace(",",":"));
         }if(!sort.isEmpty()){
             size = size+"&sort=";
-        }
+        }if(filter == null)
+            return "redirect:./?page="+page+"&size="+size+String.join("&sort=",sort);
         return "redirect:./?page="+page+"&size="+size+String.join("&sort=",sort)+"&filter="+String.join("&filter=",filter);
     }
 }

@@ -53,4 +53,3 @@ Change page size
 <a href="pagesize{10}${url}">10</a>
 <a href="pagesize{15}${url}">15</a>
 <br/>
-<a href="go">Ajax</a>

@@ -2,18 +2,14 @@ package com.internship.service;
 import com.internship.dao.IUserDao;
 import com.internship.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class UserService implements IUserService{
     @Autowired
-    //@Qualifier("userHibernateDao")
     private IUserDao dao;
 
     @Override
@@ -54,6 +50,7 @@ public class UserService implements IUserService{
             }
         }
         */
+
         if(position != 1) {
             position = position + pageSize - 2;
         }else{

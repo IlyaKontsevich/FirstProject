@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,21 +16,11 @@ import java.util.List;
 public class UserController {
     @Autowired
     private IUserService service;
+
     @RequestMapping("{url}/form")
     public String showForm(Model m){
         m.addAttribute("command", new User("username"));
         return "userForm";
-    }
-
-    @RequestMapping("/go")
-    public String go(){
-        return "ajax";
-    }
-
-    @RequestMapping("/ajax")
-    @ResponseBody
-    public String ajax(){
-        return service.get(25).getName();
     }
 
     @RequestMapping(value="{url}/save",method = RequestMethod.POST)
@@ -50,9 +41,15 @@ public class UserController {
     public String view(@RequestParam(value="page", defaultValue = "1") String page,
                        @RequestParam(value="size", defaultValue = "3") String size,
                        @RequestParam(value="sort",defaultValue = "name:asc") List<String> sort,
-                       @RequestParam(value="filter",defaultValue = "age:1") List<String> filter, Model m){
-        Collection<User> list = service.getPage(Integer.parseInt(page),Integer.parseInt(size),sort,filter);
-        m.addAttribute("url","?page="+page+"&size="+size+"&sort="+String.join("&sort=",sort)+"&filter="+String.join("&filter=",filter));
+                       @RequestParam(required = false, value="filter") List<String> filter, Model m){
+        if(filter == null) {
+            filter = new ArrayList<String>();
+            filter.add("");
+            m.addAttribute("url","?page="+page+"&size="+size+"&sort="+String.join("&sort=",sort));
+        }else {
+            m.addAttribute("url","?page="+page+"&size="+size+"&sort="+String.join("&sort=",sort)+"&filter="+String.join("&filter=",filter));
+        }
+        Collection<User> list = service.getPage(Integer.parseInt(page), Integer.parseInt(size), sort, filter);
         m.addAttribute("filter",String.join(", and by ",filter).replace(":"," value:"));
         m.addAttribute("sort",String.join(", and by ",sort).replace(":"," order:"));
         m.addAttribute("pageSize",Integer.parseInt(size));

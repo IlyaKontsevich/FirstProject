@@ -1,4 +1,0 @@
- 0,ilya
- 1,kiril
- 2,slava
- 3,pety

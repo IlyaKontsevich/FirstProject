@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group 'GradelProject'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.hibernate:hibernate-core:5.4.1.Final'
+    implementation 'org.hibernate:hibernate-entitymanager:5.4.1.Final'
+    //implementation 'org.redisson:redisson-hibernate-53:3.10.2'
+}

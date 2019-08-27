@@ -3,8 +3,8 @@ package com.internship.controller.rest;
 import com.internship.model.User;
 import com.internship.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -16,7 +16,7 @@ public class RestUserController {
     private IUserService service;
 
 
-    @RequestMapping(value = "/users",method = RequestMethod.GET)
+    @RequestMapping(value = "/",method = RequestMethod.GET)
     public Collection<User> view(@RequestParam(value="page", defaultValue = "1") String page,
                        @RequestParam(value="size", defaultValue = "3") String size,
                        @RequestParam(value="sort",defaultValue = "name:asc") List<String> sort,

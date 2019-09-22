@@ -8,4 +8,5 @@ import java.util.List;
 public interface IUserService extends IService<User>{
     Collection<User> getPage(Integer position, Integer pageSize, List<String> sortType, List<String> filter);
     Integer getSize();
+    User getByEmail(String email);
 }

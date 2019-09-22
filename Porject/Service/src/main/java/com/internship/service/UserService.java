@@ -56,6 +56,11 @@ public class UserService implements IUserService{
         return dao.getSize();
     }
 
+    @Override
+    public User getByEmail(String email) {
+        return dao.getByEmail(email);
+    }
+
     public Collection<User> getAll() {
         return dao.getAll();
     }

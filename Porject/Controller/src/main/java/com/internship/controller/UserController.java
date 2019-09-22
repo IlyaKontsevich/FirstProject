@@ -17,6 +17,16 @@ public class UserController {
     @Autowired
     private IUserService service;
 
+    @RequestMapping("/login")
+    public String Login(){
+        return "login";
+    }
+    @RequestMapping("/logerror")
+    public String LogErr(Model m){
+        m.addAttribute("error","Incorrect login or password, please try again");
+        return "login";
+    }
+
     @RequestMapping("{url}/form")
     public String showForm(Model m){
         m.addAttribute("command", new User("username"));

@@ -30,7 +30,11 @@ dependencies {
     implementation 'org.springframework:spring-core:5.1.5.RELEASE'
     implementation 'org.springframework:spring-web:5.1.5.RELEASE'
     implementation 'org.springframework:spring-context:5.1.5.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.1.5.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.1.5.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.1.5.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-test:2.1.7.RELEASE'
+
     project.dependencies{
         compile(project(':Service'))
     }

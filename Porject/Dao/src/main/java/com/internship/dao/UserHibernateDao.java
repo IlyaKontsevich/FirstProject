@@ -92,6 +92,15 @@ public class UserHibernateDao implements IUserDao{
     }
 
     @Override
+    public User getByEmail(String email) {
+        List<User> users = (List<User>)  HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery("From User WHERE email ='"+email+"'").list();
+        if(users.size()==0){
+            return null;
+        }
+        return users.get(0);
+    }
+
+    @Override
     public boolean delete(Integer id) {
         if(get(id) == null)
             return false;
